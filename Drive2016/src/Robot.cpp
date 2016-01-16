@@ -1,5 +1,6 @@
 #include "WPILib.h"
-// hiya
+// hiya CTRL, SHIFT, 3 to commit and/or push
+//Right click on Drive2016 to access team
 class Robot: public IterativeRobot
 {
 private:
