@@ -10,12 +10,24 @@ private:
 	const std::string autoNameCustom = "My Auto";
 	std::string autoSelected;
 
+	VictorSP *leftMotor;
+	VictorSP *rightMotor;
+	RobotDrive *drive;
+
+	Joystick *driveStick;
+
 	void RobotInit()
 	{
 		chooser = new SendableChooser();
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
 		chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
 		SmartDashboard::PutData("Auto Modes", chooser);
+
+		driveStick = new Joystick(1);
+
+		leftMotor = new VictorSP(12);
+		rightMotor = new VictorSP(3);
+		drive = new RobotDrive(leftMotor, rightMotor);
 	}
 
 
@@ -57,7 +69,10 @@ private:
 
 	void TeleopPeriodic()
 	{
-
+		//while (isOperatorControl() && isEnabled()) {
+			drive->ArcadeDrive(driveStick);
+			//Timer.delay(0.01);
+		//}
 	}
 
 	void TestPeriodic()
