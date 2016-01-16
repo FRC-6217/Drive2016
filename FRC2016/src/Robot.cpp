@@ -72,6 +72,8 @@ private:
 	void TeleopPeriodic()
 	{
 		drive->ArcadeDrive(stick);
+		drive->SetMaxOutput((1-stick->GetThrottle())/2);
+		printf("%f\n", (1-stick->GetThrottle())/2);
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
 	}
