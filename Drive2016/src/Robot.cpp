@@ -69,11 +69,16 @@ private:
 
 	void TeleopPeriodic()
 	{
-		//while (isOperatorControl() && isEnabled()) {
-			drive->ArcadeDrive(driveStick);
-			//Timer.delay(0.01);
-		//}
+
 	}
+
+	void operatorControl() {
+		while (IsOperatorControl() && IsEnabled()) {
+			drive->ArcadeDrive(driveStick);
+			Wait(0.01);
+		}
+	}
+
 
 	void TestPeriodic()
 	{
