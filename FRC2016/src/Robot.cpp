@@ -13,6 +13,8 @@ private:
 	RobotDrive *drive;
 	Joystick *stick;
 
+	DoubleSolenoid *test1;
+
 	void RobotInit()
 	{
 		chooser = new SendableChooser();
@@ -30,6 +32,8 @@ private:
 		drive->SetMaxOutput(0.5);
 
 		stick = new Joystick(0);
+
+		test1 = new DoubleSolenoid(0,1);
 	}
 
 
@@ -58,7 +62,10 @@ private:
 	void AutonomousPeriodic()
 	{
 		if(autoSelected == autoNameCustom){
-			//Custom Auto goes here
+			test1->Set(DoubleSolenoid::Value::kForward);
+			Wait(1.0);
+			test1->Set(DoubleSolenoid::Value::kReverse);
+			Wait(1.0);
 		} else {
 			//Default Auto goes here
 		}
@@ -66,7 +73,7 @@ private:
 
 	void TeleopInit()
 	{
-
+		test1->Set(DoubleSolenoid::Value::kOff);
 	}
 
 	void TeleopPeriodic()
