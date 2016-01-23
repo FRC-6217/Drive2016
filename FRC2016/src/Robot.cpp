@@ -14,6 +14,7 @@ private:
 	Joystick *stick;
 
 	DoubleSolenoid *test1;
+	Solenoid *test2;
 
 	void RobotInit()
 	{
@@ -34,6 +35,7 @@ private:
 		stick = new Joystick(0);
 
 		test1 = new DoubleSolenoid(0,1);
+		//test2 = new Solenoid(0);
 	}
 
 
@@ -62,10 +64,7 @@ private:
 	void AutonomousPeriodic()
 	{
 		if(autoSelected == autoNameCustom){
-			test1->Set(DoubleSolenoid::Value::kForward);
-			Wait(1.0);
-			test1->Set(DoubleSolenoid::Value::kReverse);
-			Wait(1.0);
+
 		} else {
 			//Default Auto goes here
 		}
@@ -88,6 +87,14 @@ private:
 	void TestPeriodic()
 	{
 		lw->Run();
+		printf("Forward\n");
+		test1->Set(DoubleSolenoid::Value::kForward);
+		//test2->Set(true);
+		Wait(4.0);
+		printf("Reverse\n");
+		test1->Set(DoubleSolenoid::Value::kReverse);
+		//test2->Set(false);
+		Wait(5.0);
 	}
 };
 
