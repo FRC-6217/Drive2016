@@ -1,4 +1,5 @@
 #include "WPILib.h"
+#include "Autonomous.h"
 
 class Robot: public IterativeRobot
 {
@@ -6,7 +7,6 @@ private:
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
 	const std::string autoNameDefault = "Default";
-	const std::string autoNameCustom = "My Auto";
 	std::string autoSelected;
 
 	VictorSP *leftMotor, *rightMotor;
@@ -15,6 +15,8 @@ private:
 
 	DoubleSolenoid *test1;
 	Solenoid *test2;
+
+	bool defenseCrossed;
 
 	void RobotInit()
 	{
@@ -54,20 +56,20 @@ private:
 		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
-		if(autoSelected == autoNameCustom){
-			//Custom Auto goes here
-		} else {
-			//Default Auto goes here
-		}
+		defenseCrossed = false;
 	}
 
 	void AutonomousPeriodic()
 	{
-		if(autoSelected == autoNameCustom){
-
+		if(autoSelected == "Approach Only") {
+			//only touch defense, doesn't matter what
+		} else if(crossFunctions.find(autoSelected) != crossFunctions.end()) {
+			defenseCrossed = crossFunctions["autoSelected"]();
 		} else {
-			//Default Auto goes here
+			doNothing();
 		}
+
+
 	}
 
 	void TeleopInit()
