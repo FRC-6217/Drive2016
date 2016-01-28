@@ -6,7 +6,7 @@
 
 bool doNothing() {
 	Wait(0.1);
-	printf("Doing Nothing.\n")
+	printf("Doing Nothing.\n");
 	return true;
 }
 

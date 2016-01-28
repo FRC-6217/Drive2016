@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "WPILib.h"
 #include "Autonomous.h"
 
@@ -7,6 +9,11 @@ private:
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
 	const std::string autoNameDefault = "Default";
+	const std::vector<std::string> autoNames = {
+			"Low Bar",
+			"High"
+	};
+
 	std::string autoSelected;
 
 	VictorSP *leftMotor, *rightMotor;
@@ -22,7 +29,9 @@ private:
 	{
 		chooser = new SendableChooser();
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
-		chooser->AddObject(autoNameCustom, (void*)&autoNameCustom);
+		for (std::string name : autoNames) {
+			chooser->AddObject(name, (void*)&name);
+		}
 		SmartDashboard::PutData("Auto Modes", chooser);
 
 		leftMotor = new VictorSP(1);
@@ -64,7 +73,8 @@ private:
 		if(autoSelected == "Approach Only") {
 			//only touch defense, doesn't matter what
 		} else if(crossFunctions.find(autoSelected) != crossFunctions.end()) {
-			defenseCrossed = crossFunctions["autoSelected"]();
+			bool (*crossFunction)() = crossFunctions.at("autoSelected");
+			defenseCrossed = crossFunction();
 		} else {
 			doNothing();
 		}
