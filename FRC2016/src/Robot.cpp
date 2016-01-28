@@ -24,6 +24,7 @@ private:
 	Solenoid *test2;
 
 	bool defenseCrossed;
+	bool done;
 
 	void RobotInit()
 	{
@@ -66,20 +67,27 @@ private:
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
 		defenseCrossed = false;
+		done = false;
 	}
 
 	void AutonomousPeriodic()
 	{
-		if(autoSelected == "Approach Only") {
-			//only touch defense, doesn't matter what
-		} else if(crossFunctions.find(autoSelected) != crossFunctions.end()) {
-			bool (*crossFunction)() = crossFunctions.at("autoSelected");
-			defenseCrossed = crossFunction();
+		if(done) {
+			//doNothing(); //Wait? Why do I have a function for this?
 		} else {
-			doNothing();
+		if (autoSelected == "Approach Only") {
+			//only touch defense, doesn't matter what
+		} else if (!defenseCrossed) {
+				if(crossFunctions.find(autoSelected) != crossFunctions.end()) {
+					bool (*crossFunction)() = crossFunctions.at("autoSelected");
+					defenseCrossed = crossFunction();
+				} else {
+					doNothing();
+				}
+			} else {
+				//after we cross...
+			}
 		}
-
-
 	}
 
 	void TeleopInit()
