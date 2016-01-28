@@ -30,8 +30,8 @@ private:
 	{
 		chooser = new SendableChooser();
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
-		for (std::string name : autoNames) {
-			chooser->AddObject(name, (void*)&name);
+		for (std::map<std::string, bool (*)()>::const_iterator it = crossFunctions.begin(); it!= crossFunctions.end(); it++) {
+			chooser->AddObject(it->first, (void*)&(it->first));
 		}
 		SmartDashboard::PutData("Auto Modes", chooser);
 
