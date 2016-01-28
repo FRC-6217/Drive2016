@@ -1,1 +1,0 @@
-This is the Repository for First Robotics team 6217's robot code for 2016.
