@@ -16,7 +16,7 @@ private:
 
 	std::string autoSelected;
 
-	VictorSP *leftMotor, *rightMotor;
+	//VictorSP *leftMotor, *rightMotor;
 	RobotDrive *drive;
 
 	Joystick *stick;
@@ -38,12 +38,18 @@ private:
 		}
 		SmartDashboard::PutData("Auto Modes", chooser);
 
-		leftMotor = new VictorSP(1);
-		rightMotor = new VictorSP(0);
+		//leftMotor = new VictorSP(1);
+		//rightMotor = new VictorSP(0);
 
-		rightMotor->SetInverted(true);
-		leftMotor->SetInverted(true);
-		drive = new RobotDrive(leftMotor, rightMotor);
+		//rightMotor->SetInverted(true);
+		//leftMotor->SetInverted(true);
+
+		//Front Left, Back Left, Front Right, Back Right
+		drive = new RobotDrive(0, 1, 2, 3);
+		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontLeftMotor, true);
+		drive->SetInvertedMotor(RobotDrive::MotorType::kRearLeftMotor, true);
+		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontRightMotor, true);
+		drive->SetInvertedMotor(RobotDrive::MotorType::kRearRightMotor, true);
 
 		drive->SetMaxOutput(0.5);
 
