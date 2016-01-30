@@ -1,41 +1,61 @@
 #include "Autonomous.h"
 
 #include <stdio.h>
+#include <map>
 
 #include "WPILib.h"
 
-bool doNothing() {
+RobotDrive *Autonomous::drive = NULL;
+
+const std::map<std::string, bool (*)()> Autonomous::crossFunctions =
+{
+	{"Low Bar", &Autonomous::lowBar},
+	{"Portcullis", &Autonomous::portcullis},
+	{"Cheval De Frise", &Autonomous::chevalDeFrise},
+	{"Moat", &Autonomous::moat},
+	{"Ramparts", &Autonomous::ramparts},
+	{"Drawbridge", &Autonomous::drawBridge},
+	{"Sally Port", &Autonomous::sallyPort},
+	{"Rock Wall", &Autonomous::rockWall},
+	{"Rough Terrain", &Autonomous::roughTerrain}
+};
+
+void Autonomous::init(RobotDrive *newDrive) {
+	drive = newDrive;
+}
+
+bool Autonomous::doNothing() {
 	Wait(0.1);
 	printf("Doing Nothing.\n");
 	return true;
 }
 
 //cross functions
-bool lowBar() {
+bool Autonomous::lowBar() {
 	return false;
 }
 
-bool portcullis() {
+bool Autonomous::portcullis() {
 	return false;
 }
-bool chevalDeFrise() {
+bool Autonomous::chevalDeFrise() {
 	return false;
 }
-bool moat() {
+bool Autonomous::moat() {
 	return false;
 }
-bool ramparts() {
+bool Autonomous::ramparts() {
 	return false;
 }
-bool drawBridge() {
+bool Autonomous::drawBridge() {
 	return false;
 }
-bool sallyPort() {
+bool Autonomous::sallyPort() {
 	return false;
 }
-bool rockWall() {
+bool Autonomous::rockWall() {
 	return false;
 }
-bool roughTerrain() {
+bool Autonomous::roughTerrain() {
 	return false;
 }

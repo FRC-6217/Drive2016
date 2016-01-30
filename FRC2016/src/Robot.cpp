@@ -8,7 +8,7 @@ class Robot: public IterativeRobot
 private:
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
-	const std::string autoNameDefault = "Default";
+	const std::string autoNameDefault = "Approch Only";
 	const std::vector<std::string> autoNames = {
 			"Low Bar",
 			"High"
@@ -18,6 +18,7 @@ private:
 
 	VictorSP *leftMotor, *rightMotor;
 	RobotDrive *drive;
+
 	Joystick *stick;
 
 	DoubleSolenoid *test1;
@@ -30,7 +31,7 @@ private:
 	{
 		chooser = new SendableChooser();
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
-		for (std::map<std::string, bool (*)()>::const_iterator it = crossFunctions.begin(); it!= crossFunctions.end(); it++) {
+		for (std::map<std::string, bool (*)()>::const_iterator it = Autonomous::crossFunctions.begin(); it!= Autonomous::crossFunctions.end(); it++) {
 			chooser->AddObject(it->first, (void*)&(it->first));
 		}
 		SmartDashboard::PutData("Auto Modes", chooser);
@@ -46,7 +47,7 @@ private:
 
 		stick = new Joystick(0);
 
-		test1 = new DoubleSolenoid(0,1);
+		//test1 = new DoubleSolenoid(0,1);
 		//test2 = new Solenoid(0);
 	}
 
@@ -78,11 +79,11 @@ private:
 		if (autoSelected == "Approach Only") {
 			//only touch defense, doesn't matter what
 		} else if (!defenseCrossed) {
-				if(crossFunctions.find(autoSelected) != crossFunctions.end()) {
-					bool (*crossFunction)() = crossFunctions.at("autoSelected");
+				if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
+					bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
 					defenseCrossed = crossFunction();
 				} else {
-					doNothing();
+					//doNothing();
 				}
 			} else {
 				//after we cross...
@@ -107,7 +108,7 @@ private:
 	void TestPeriodic()
 	{
 		lw->Run();
-		printf("Forward\n");
+		/*printf("Forward\n");
 		test1->Set(DoubleSolenoid::Value::kForward);
 		//test2->Set(true);
 		Wait(4.0);
@@ -115,6 +116,9 @@ private:
 		test1->Set(DoubleSolenoid::Value::kReverse);
 		//test2->Set(false);
 		Wait(5.0);
+		*/
+
+
 	}
 };
 

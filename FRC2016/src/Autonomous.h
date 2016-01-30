@@ -2,30 +2,29 @@
 #define AUTONOMOUS_H_
 
 #include <map>
+#include "WPILib.h"
 
-bool doNothing();
-//cross functions
-bool lowBar();
-bool portcullis();
-bool chevalDeFrise();
-bool moat();
-bool ramparts();
-bool drawBridge();
-bool sallyPort();
-bool rockWall();
-bool roughTerrain();
+class Autonomous {
+	static RobotDrive *drive;
+	//other sensors here
 
-const std::map<std::string, bool (*)()> crossFunctions
-{
-	{"Low Bar", &lowBar},
-	{"Portcullis", &portcullis},
-	{"Cheval De Frise", &chevalDeFrise},
-	{"Moat", &moat},
-	{"Ramparts", &ramparts},
-	{"Drawbridge", &drawBridge},
-	{"Sally Port", &sallyPort},
-	{"Rock Wall", &rockWall},
-	{"Rough Terrain", &roughTerrain}
+public:
+	const static std::map<std::string, bool (*)()> crossFunctions;
+
+	static void init(RobotDrive *drive);
+
+	static bool doNothing();
+	//cross functions
+	static bool lowBar();
+	static bool portcullis();
+	static bool chevalDeFrise();
+	static bool moat();
+	static bool ramparts();
+	static bool drawBridge();
+	static bool sallyPort();
+	static bool rockWall();
+	static bool roughTerrain();
+
 };
 
 #endif
