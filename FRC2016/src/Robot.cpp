@@ -58,6 +58,9 @@ private:
 		//test1 = new DoubleSolenoid(0,1);
 		//test2 = new Solenoid(0);
 
+		launch1 = new VictorSP(4);
+		launch2 = new VictorSP(5);
+
 
 	}
 
