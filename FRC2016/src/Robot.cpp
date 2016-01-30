@@ -8,7 +8,7 @@ class Robot: public IterativeRobot
 private:
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
-	const std::string autoNameDefault = "Approch Only";
+	const std::string autoNameDefault = "Approach Only";
 	const std::vector<std::string> autoNames = {
 			"Low Bar",
 			"High"
@@ -23,6 +23,8 @@ private:
 
 	DoubleSolenoid *test1;
 	Solenoid *test2;
+
+	VictorSP *launch1, *launch2;
 
 	bool defenseCrossed;
 	bool done;
@@ -49,6 +51,8 @@ private:
 
 		//test1 = new DoubleSolenoid(0,1);
 		//test2 = new Solenoid(0);
+
+
 	}
 
 
@@ -117,7 +121,8 @@ private:
 		//test2->Set(false);
 		Wait(5.0);
 		*/
-
+		launch1->Set(0.2);
+		launch2->Set(0.2);
 
 	}
 };
