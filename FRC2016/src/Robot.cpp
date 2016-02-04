@@ -9,10 +9,6 @@ private:
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
 	const std::string autoNameDefault = "Approach Only";
-	const std::vector<std::string> autoNames = {
-			"Low Bar",
-			"High"
-	};
 
 	std::string autoSelected;
 
