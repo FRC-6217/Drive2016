@@ -41,7 +41,7 @@ private:
 		//leftMotor->SetInverted(true);
 
 		//Front Left, Back Left, Front Right, Back Right
-		drive = new RobotDrive(0, 1, 2, 3);
+		drive = new RobotDrive(2, 3, 0, 1);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kRearLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontRightMotor, true);
@@ -102,7 +102,7 @@ private:
 
 	void TeleopInit()
 	{
-		test1->Set(DoubleSolenoid::Value::kOff);
+		//test1->Set(DoubleSolenoid::Value::kOff);
 	}
 
 	void TeleopPeriodic()
@@ -112,6 +112,11 @@ private:
 		printf("%f\n", (1-stick->GetThrottle())/2);
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
+
+		if (stick->GetTrigger()) {
+			launch1->Set(1.0);
+			launch2->Set(1.0);
+		}
 	}
 
 	void TestPeriodic()
