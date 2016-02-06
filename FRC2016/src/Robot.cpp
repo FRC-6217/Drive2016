@@ -57,6 +57,8 @@ private:
 		launch1 = new VictorSP(4);
 		launch2 = new VictorSP(5);
 
+		launch1->SetInverted(true);
+
 
 	}
 
@@ -115,7 +117,13 @@ private:
 
 		if (stick->GetTrigger()) {
 			launch1->Set(1.0);
-			launch2->Set(1.0);
+			launch2->Set(1.5);
+		} else if (stick->GetRawButton(2)) {
+			launch1->Set(-0.3);
+			launch2->Set(-0.3);
+		} else {
+			launch1->Set(0.0);
+			launch2->Set(0.0);
 		}
 	}
 
