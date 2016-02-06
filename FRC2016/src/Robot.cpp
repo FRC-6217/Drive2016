@@ -116,9 +116,6 @@ private:
 		if (stick->GetTrigger()) {
 			launch1->Set(1.0);
 			launch2->Set(1.0);
-		} else {
-			launch1->Set(0.0);
-			launch2->Set(0.0);
 		}
 	}
 
