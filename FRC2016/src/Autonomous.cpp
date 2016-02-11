@@ -20,8 +20,10 @@ const std::map<std::string, bool (*)()> Autonomous::crossFunctions =
 	{"Rough Terrain", &Autonomous::roughTerrain}
 };
 
-void Autonomous::init(RobotDrive *newDrive) {
-	drive = newDrive;
+void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *enc) {
+	Autonomous::drive = drive;
+	Autonomous::gyro = gyro;
+	Autonomous::enc = enc;
 }
 
 bool Autonomous::doNothing() {

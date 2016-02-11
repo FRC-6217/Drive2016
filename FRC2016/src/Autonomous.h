@@ -6,12 +6,14 @@
 
 class Autonomous {
 	static RobotDrive *drive;
+	static Gyro *gyro;
+	static Encoder *enc;
 	//other sensors here
 
 public:
 	const static std::map<std::string, bool (*)()> crossFunctions;
 
-	static void init(RobotDrive *drive);
+	static void init(RobotDrive *drive, Gyro *gyro, Encoder *enc);
 
 	static bool doNothing();
 	//cross functions

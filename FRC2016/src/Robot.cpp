@@ -22,6 +22,9 @@ private:
 
 	VictorSP *launch1, *launch2;
 
+	Gyro *gyro;
+	Encoder *enc;
+
 	bool defenseCrossed;
 	bool done;
 
@@ -41,7 +44,7 @@ private:
 		//leftMotor->SetInverted(true);
 
 		//Front Left, Back Left, Front Right, Back Right
-		drive = new RobotDrive(0, 1, 2, 3);
+		drive = new RobotDrive(2, 3, 0, 1);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kRearLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontRightMotor, true);
@@ -56,8 +59,10 @@ private:
 
 		launch1 = new VictorSP(4);
 		launch2 = new VictorSP(5);
+		launch1->SetInverted(true);
 
-
+		gyro = new AnalogGyro(1);
+		enc = new Encoder(0, 1, false, Encoder::EncodingType::k1X);
 	}
 
 
@@ -78,6 +83,11 @@ private:
 
 		defenseCrossed = false;
 		done = false;
+
+		Autonomous::init(drive, gyro, enc);
+
+		//Make sure to reset the encoder!
+		enc->Reset();
 	}
 
 	void AutonomousPeriodic()
@@ -102,7 +112,7 @@ private:
 
 	void TeleopInit()
 	{
-
+		//test1->Set(DoubleSolenoid::Value::kOff);
 	}
 
 	void TeleopPeriodic()
@@ -112,6 +122,17 @@ private:
 		printf("%f\n", (1-stick->GetThrottle())/2);
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
+
+		if (stick->GetTrigger()) {
+			launch1->Set(1.0);
+			launch2->Set(1.5);
+		} else if (stick->GetRawButton(2)) {
+			launch1->Set(-0.3);
+			launch2->Set(-0.3);
+		} else {
+			launch1->Set(0.0);
+			launch2->Set(0.0);
+		}
 	}
 
 	void TestPeriodic()
