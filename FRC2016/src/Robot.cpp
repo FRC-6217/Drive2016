@@ -54,7 +54,7 @@ private:
 
 		stick = new Joystick(0);
 
-		//test1 = new DoubleSolenoid(0,1);
+		test1 = new DoubleSolenoid(2,3);
 		//test2 = new Solenoid(0);
 
 		launch1 = new VictorSP(4);
@@ -133,6 +133,15 @@ private:
 			launch1->Set(0.0);
 			launch2->Set(0.0);
 		}
+		//TEST CODE
+		if (stick->GetRawButton(4)) {
+			test1->Set(DoubleSolenoid::Value::kForward);
+		} else if (stick->GetRawButton(6)) {
+			test1->Set(DoubleSolenoid::Value::kReverse);
+		} else {
+			test1->Set(DoubleSolenoid::Value::kOff);
+		}
+
 	}
 
 	void TestPeriodic()
