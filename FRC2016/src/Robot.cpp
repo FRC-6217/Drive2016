@@ -102,7 +102,7 @@ private:
 
 	void TeleopInit()
 	{
-		test1->Set(DoubleSolenoid::Value::kOff);
+
 	}
 
 	void TeleopPeriodic()
