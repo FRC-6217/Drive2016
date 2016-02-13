@@ -20,6 +20,7 @@ private:
 	DoubleSolenoid *test1;
 	Solenoid *test2;
 
+	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
 	VictorSP *launch1, *launch2;
 
 	Gyro *gyro;
@@ -44,9 +45,14 @@ private:
 		//rightMotor->SetInverted(true);
 		//leftMotor->SetInverted(true);
 
-		//Front Left, Back Left, Front Right, Back Right
-		//2,3,0,1
-		drive = new RobotDrive(2, 3, 0, 1);
+		//frontLeft = new VictorSP(2);
+		//backLeft = new VictorSP(3);
+		//frontRight = new VictorSP(0);
+		//backRight = new VictorSP(1);
+
+		drive = new RobotDrive(2,3,0,1);
+		//drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
+
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kRearLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontRightMotor, true);
@@ -64,11 +70,14 @@ private:
 		launch1->SetInverted(true);
 
 		gyro = new AnalogGyro(1);
-		leftEnc = new Encoder(0, 1, false, Encoder::EncodingType::k1X);
-		rightEnc = new Encoder(2,3, false, Encoder::EncodingType::k1X);
+		leftEnc = new Encoder(2, 3, false, Encoder::EncodingType::k1X);
+		rightEnc = new Encoder(0,1, false, Encoder::EncodingType::k1X);
 		//Configure for inches.
-		leftEnc->SetDistancePerPulse(10);
-		rightEnc->SetDistancePerPulse(10);
+		leftEnc->SetDistancePerPulse(0.1);
+		rightEnc->SetDistancePerPulse(0.1);
+
+
+		Autonomous::init(drive, gyro, leftEnc, rightEnc);
 	}
 
 
@@ -90,20 +99,22 @@ private:
 		defenseCrossed = false;
 		done = false;
 
-		Autonomous::init(drive, gyro, leftEnc, rightEnc);
-
 		//Make sure to reset the encoder!
 		leftEnc->Reset();
 		rightEnc->Reset();
+		gyro->Reset();
 	}
 
+
+	//TODO: why does auto only work once, then not move?
 	void AutonomousPeriodic()
 	{
+		printf("Distance: %f\n", rightEnc->GetDistance());
 		if(done) {
 			//doNothing(); //Wait? Why do I have a function for this?
 		} else {
 		if (autoSelected == "Approach Only") {
-			Autonomous::approachOnly();
+			done = Autonomous::approachOnly();
 		} else if (!defenseCrossed) {
 				if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
 					bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
@@ -121,6 +132,7 @@ private:
 	{
 		leftEnc->Reset();
 		rightEnc->Reset();
+		gyro->Reset();
 	}
 
 	void TeleopPeriodic()
@@ -134,11 +146,11 @@ private:
 		//rightMotor->Set(0.1);
 
 		if (stick->GetTrigger()) {
-			launch1->Set(1.0);
-			launch2->Set(1.0);
-		} else if (stick->GetRawButton(2)) {
 			launch1->Set(-1.0);
 			launch2->Set(-1.0);
+		} else if (stick->GetRawButton(2)) {
+			launch1->Set(0.5);
+			launch2->Set(0.5);
 		} else {
 			launch1->Set(0.0);
 			launch2->Set(0.0);

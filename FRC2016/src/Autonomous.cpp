@@ -29,11 +29,11 @@ void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *
 	Autonomous::leftEnc = leftEnc;
 	Autonomous::rightEnc = rightEnc;
 }
-
+//TODO: fix conditionals
 bool Autonomous::approachOnly() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 60 || rightEnc->GetDistance() > 60) {
+	if (/*leftEnc->GetDistance() == 60.0 */ rightEnc->GetDistance() * -1 > 60.0) {
 		return true;
 	}
 	return false;
