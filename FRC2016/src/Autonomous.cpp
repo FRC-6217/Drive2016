@@ -33,7 +33,7 @@ void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *
 bool Autonomous::approachOnly() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 10 || rightEnc->GetDistance() > 10) {
+	if (leftEnc->GetDistance() > 60 || rightEnc->GetDistance() > 60) {
 		return true;
 	}
 	return false;
@@ -41,30 +41,59 @@ bool Autonomous::approachOnly() {
 
 //cross functions
 bool Autonomous::lowBar() {
+	float angle = gyro->GetAngle();
+	drive->Drive(-0.5, -angle * .03);
+	if (leftEnc->GetDistance() > 84 || rightEnc->GetDistance() > 84) {
+		return true;
+	}
 	return false;
 }
 
 bool Autonomous::portcullis() {
+	//Nope.
 	return false;
 }
 bool Autonomous::chevalDeFrise() {
+	//Maybe.
 	return false;
 }
 bool Autonomous::moat() {
+	float angle = gyro->GetAngle();
+	drive->Drive(-0.5, -angle * .03);
+	if (leftEnc->GetDistance() > 84 || rightEnc->GetDistance() > 84) {
+		return true;
+	}
 	return false;
 }
 bool Autonomous::ramparts() {
+	float angle = gyro->GetAngle();
+	drive->Drive(-0.5, -angle * .03);
+	if (leftEnc->GetDistance() > 84 || rightEnc->GetDistance() > 84) {
+		return true;
+	}
 	return false;
 }
 bool Autonomous::drawBridge() {
+	//No
 	return false;
 }
 bool Autonomous::sallyPort() {
+	//No
 	return false;
 }
 bool Autonomous::rockWall() {
+	float angle = gyro->GetAngle();
+	drive->Drive(-0.5, -angle * .03);
+	if (leftEnc->GetDistance() > 60 || rightEnc->GetDistance() > 60) {
+		return true;
+	}
 	return false;
 }
 bool Autonomous::roughTerrain() {
+	float angle = gyro->GetAngle();
+	drive->Drive(-0.5, -angle * .03);
+	if (leftEnc->GetDistance() > 60 || rightEnc->GetDistance() > 60) {
+		return true;
+	}
 	return false;
 }

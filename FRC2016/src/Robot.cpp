@@ -65,6 +65,7 @@ private:
 		gyro = new AnalogGyro(1);
 		leftEnc = new Encoder(0, 1, false, Encoder::EncodingType::k1X);
 		rightEnc = new Encoder(2,3, false, Encoder::EncodingType::k1X);
+		//Configure for inches.
 		leftEnc->SetDistancePerPulse(10);
 		rightEnc->SetDistancePerPulse(10);
 	}
