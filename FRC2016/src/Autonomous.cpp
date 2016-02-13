@@ -6,6 +6,9 @@
 #include "WPILib.h"
 
 RobotDrive *Autonomous::drive = NULL;
+Gyro *Autonomous::gyro = NULL;
+Encoder *Autonomous::leftEnc = NULL;
+Encoder *Autonomous::rightEnc = NULL;
 
 const std::map<std::string, bool (*)()> Autonomous::crossFunctions =
 {
@@ -20,16 +23,20 @@ const std::map<std::string, bool (*)()> Autonomous::crossFunctions =
 	{"Rough Terrain", &Autonomous::roughTerrain}
 };
 
-void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *enc) {
+void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *rightEnc) {
 	Autonomous::drive = drive;
 	Autonomous::gyro = gyro;
-	Autonomous::enc = enc;
+	Autonomous::leftEnc = leftEnc;
+	Autonomous::rightEnc = rightEnc;
 }
 
-bool Autonomous::doNothing() {
-	Wait(0.1);
-	printf("Doing Nothing.\n");
-	return true;
+bool Autonomous::approachOnly() {
+	float angle = gyro->GetAngle();
+	drive->Drive(-0.5, -angle * .03);
+	if (leftEnc->GetDistance() > 10 || rightEnc->GetDistance() > 10) {
+		return true;
+	}
+	return false;
 }
 
 //cross functions

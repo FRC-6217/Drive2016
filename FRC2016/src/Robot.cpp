@@ -23,7 +23,8 @@ private:
 	VictorSP *launch1, *launch2;
 
 	Gyro *gyro;
-	Encoder *enc;
+	Encoder *leftEnc;
+	Encoder *rightEnc;
 
 	bool defenseCrossed;
 	bool done;
@@ -54,7 +55,7 @@ private:
 
 		stick = new Joystick(0);
 
-		test1 = new DoubleSolenoid(2,3);
+		test1 = new DoubleSolenoid(4,5);
 		//test2 = new Solenoid(0);
 
 		launch1 = new VictorSP(4);
@@ -62,7 +63,10 @@ private:
 		launch1->SetInverted(true);
 
 		gyro = new AnalogGyro(1);
-		enc = new Encoder(0, 1, false, Encoder::EncodingType::k1X);
+		leftEnc = new Encoder(0, 1, false, Encoder::EncodingType::k1X);
+		rightEnc = new Encoder(2,3, false, Encoder::EncodingType::k1X);
+		leftEnc->SetDistancePerPulse(10);
+		rightEnc->SetDistancePerPulse(10);
 	}
 
 
@@ -84,10 +88,11 @@ private:
 		defenseCrossed = false;
 		done = false;
 
-		Autonomous::init(drive, gyro, enc);
+		Autonomous::init(drive, gyro, leftEnc, rightEnc);
 
 		//Make sure to reset the encoder!
-		enc->Reset();
+		leftEnc->Reset();
+		rightEnc->Reset();
 	}
 
 	void AutonomousPeriodic()
@@ -96,7 +101,7 @@ private:
 			//doNothing(); //Wait? Why do I have a function for this?
 		} else {
 		if (autoSelected == "Approach Only") {
-			//only touch defense, doesn't matter what
+			Autonomous::approachOnly();
 		} else if (!defenseCrossed) {
 				if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
 					bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
@@ -112,11 +117,14 @@ private:
 
 	void TeleopInit()
 	{
-		//test1->Set(DoubleSolenoid::Value::kOff);
+		leftEnc->Reset();
+		rightEnc->Reset();
 	}
 
 	void TeleopPeriodic()
 	{
+		//printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
+
 		drive->ArcadeDrive(stick);
 		drive->SetMaxOutput((1-stick->GetThrottle())/2);
 		printf("%f\n", (1-stick->GetThrottle())/2);
@@ -125,39 +133,29 @@ private:
 
 		if (stick->GetTrigger()) {
 			launch1->Set(1.0);
-			launch2->Set(1.5);
+			launch2->Set(1.0);
 		} else if (stick->GetRawButton(2)) {
-			launch1->Set(-0.3);
-			launch2->Set(-0.3);
+			launch1->Set(-1.0);
+			launch2->Set(-1.0);
 		} else {
 			launch1->Set(0.0);
 			launch2->Set(0.0);
 		}
-		//TEST CODE
+		/*//TEST CODE
 		if (stick->GetRawButton(4)) {
 			test1->Set(DoubleSolenoid::Value::kForward);
 		} else if (stick->GetRawButton(6)) {
 			test1->Set(DoubleSolenoid::Value::kReverse);
 		} else {
 			test1->Set(DoubleSolenoid::Value::kOff);
-		}
+		}*/
 
 	}
 
 	void TestPeriodic()
 	{
 		lw->Run();
-		/*printf("Forward\n");
-		test1->Set(DoubleSolenoid::Value::kForward);
-		//test2->Set(true);
-		Wait(4.0);
-		printf("Reverse\n");
-		test1->Set(DoubleSolenoid::Value::kReverse);
-		//test2->Set(false);
-		Wait(5.0);
-		*/
-		launch1->Set(0.2);
-		launch2->Set(0.2);
+		printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
 
 	}
 };
