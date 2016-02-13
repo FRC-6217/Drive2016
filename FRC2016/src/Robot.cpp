@@ -45,6 +45,7 @@ private:
 		//leftMotor->SetInverted(true);
 
 		//Front Left, Back Left, Front Right, Back Right
+		//2,3,0,1
 		drive = new RobotDrive(2, 3, 0, 1);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kRearLeftMotor, true);
@@ -124,11 +125,11 @@ private:
 
 	void TeleopPeriodic()
 	{
-		//printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
+		printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
 
 		drive->ArcadeDrive(stick);
 		drive->SetMaxOutput((1-stick->GetThrottle())/2);
-		printf("%f\n", (1-stick->GetThrottle())/2);
+		//printf("%f\n", (1-stick->GetThrottle())/2);
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
 
