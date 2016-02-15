@@ -73,8 +73,8 @@ private:
 		leftEnc = new Encoder(2, 3, false, Encoder::EncodingType::k1X);
 		rightEnc = new Encoder(0,1, false, Encoder::EncodingType::k1X);
 		//Configure for inches.
-		leftEnc->SetDistancePerPulse(0.1);
-		rightEnc->SetDistancePerPulse(0.1);
+		leftEnc->SetDistancePerPulse(-0.02);
+		rightEnc->SetDistancePerPulse(-0.02);
 
 
 		Autonomous::init(drive, gyro, leftEnc, rightEnc);
@@ -109,9 +109,9 @@ private:
 	//TODO: why does auto only work once, then not move?
 	void AutonomousPeriodic()
 	{
-		printf("Distance: %f\n", rightEnc->GetDistance());
+		printf("Distance: %f, Done:%s\n", rightEnc->GetDistance(), done ? "true" : "false");
 		if(done) {
-			//doNothing(); //Wait? Why do I have a function for this?
+			//Nothing
 		} else {
 		if (autoSelected == "Approach Only") {
 			done = Autonomous::approachOnly();
@@ -155,14 +155,14 @@ private:
 			launch1->Set(0.0);
 			launch2->Set(0.0);
 		}
-		/*//TEST CODE
+		//TEST CODE
 		if (stick->GetRawButton(4)) {
 			test1->Set(DoubleSolenoid::Value::kForward);
 		} else if (stick->GetRawButton(6)) {
 			test1->Set(DoubleSolenoid::Value::kReverse);
 		} else {
 			test1->Set(DoubleSolenoid::Value::kOff);
-		}*/
+		}
 
 	}
 
