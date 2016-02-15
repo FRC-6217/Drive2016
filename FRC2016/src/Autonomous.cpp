@@ -33,7 +33,7 @@ void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *
 bool Autonomous::approachOnly() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 60.0  rightEnc->GetDistance() > 60.0) {
+	if (leftEnc->GetDistance() > 60.0 || rightEnc->GetDistance() > 60.0) {
 		return true;
 	}
 	return false;
