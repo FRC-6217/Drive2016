@@ -181,22 +181,27 @@ private:
 		if (shootStick->GetRawAxis(2) > 0) {
 			launch1->Set(-1.0);
 			launch2->Set(-1.0);
-		} else if (driveStick->GetRawAxis(5) > 0) {
+		} else if (shootStick->GetRawAxis(5) > 0) {
 			launch1->Set(0.5);
 			launch2->Set(0.5);
 		} else {
 			launch1->Set(0.0);
 			launch2->Set(0.0);
 		}
-		//TEST CODE
-		if (driveStick->GetRawButton(4)) {
-			winch->Set(0.1);
-		} else if (driveStick->GetRawButton(6)) {
+
+		if (shootStick->GetRawButton(4)) {
 			winch->Set(-0.1);
+		} else if (shootStick->GetRawButton(5)) {
+			winch->Set(0.1);
 		} else {
 			winch->Set(0.0);
 		}
 
+		if (shootStick->GetRawButton(0)) {
+			//TODO: push ball forward
+		} else {
+			//pull piston back
+		}
 	}
 
 	void TestPeriodic()
