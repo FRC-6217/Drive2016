@@ -14,8 +14,12 @@ private:
 	SendableChooser *posChooser;
 	const std::string posDefault = "0";
 
+	SendableChooser *goalChooser;
+	const std::string goalDefault = "High";
+
 	std::string autoSelected;
 	int rotation;
+	std::string goal;
 
 	int posToDegrees[6] = {0, 1, 2, 5, -5, 0}; //TODO: configure these
 
@@ -63,6 +67,10 @@ private:
 			posChooser->AddObject(std::to_string(i), (void*)&posToDegrees[i]);
 		}
 		SmartDashboard::PutData("Position", posChooser);
+
+		goalChooser = new SendableChooser();
+		goalChooser->AddDefault(goalDefault, (void*)&goalDefault);
+		goalChooser->AddObject("Low", (void*)"Low");
 
 		drive = new RobotDrive(2,3,0,1);
 		//drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
@@ -115,6 +123,8 @@ private:
 
 		rotation = stoi(*((std::string*)posChooser->GetSelected()));
 
+		goal = *((std::string*)goalChooser->GetSelected());
+
 
 		defenseCrossed = false;
 		done = false;
@@ -150,6 +160,11 @@ private:
 				} else {
 					//TODO: use vision processing to line up shot
 					//TODO: Fire ball
+					if (goal == "High") {
+
+					} else {
+
+					}
 					done = true;
 				}
 			}
