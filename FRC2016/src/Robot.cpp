@@ -22,6 +22,7 @@ private:
 
 	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
 	VictorSP *launch1, *launch2;
+	VictorSP *winch;
 
 	Gyro *gyro;
 	Encoder *leftEnc;
@@ -77,6 +78,8 @@ private:
 		launch2 = new VictorSP(5);
 		launch1->SetInverted(true);
 
+		winch = new VictorSP(6);
+
 		gyro = new AnalogGyro(1);
 		leftEnc = new Encoder(2, 3, false, Encoder::EncodingType::k1X);
 		rightEnc = new Encoder(0,1, false, Encoder::EncodingType::k1X);
@@ -114,7 +117,6 @@ private:
 	}
 
 
-	//TODO: why does auto only work once, then not move?
 	void AutonomousPeriodic()
 	{
 		printf("Distance: %f, Done:%s\n", rightEnc->GetDistance(), done ? "true" : "false");
@@ -132,6 +134,16 @@ private:
 				}
 			} else {
 				//after we cross...
+				//TODO: Find an actual desired angle
+				float difference = gyro->GetAngle - 45;
+
+				if (difference > 10) {
+					drive->ArcadeDrive(0.0,difference * 0.3);
+				} else {
+					//TODO: use vision processing to line up shot
+					//TODO: Fire ball
+					done = true;
+				}
 			}
 		}
 	}
@@ -170,11 +182,11 @@ private:
 		}
 		//TEST CODE
 		if (stick->GetRawButton(4)) {
-			test1->Set(DoubleSolenoid::Value::kForward);
+			winch->Set(0.1)
 		} else if (stick->GetRawButton(6)) {
-			test1->Set(DoubleSolenoid::Value::kReverse);
+			winch->Set(-0.1);
 		} else {
-			test1->Set(DoubleSolenoid::Value::kOff);
+			winch->Set(0.0);
 		}
 
 	}
