@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 
 #include "WPILib.h"
 #include "Autonomous.h"
@@ -10,12 +11,20 @@ private:
 	SendableChooser *chooser;
 	const std::string autoNameDefault = "Approach Only";
 
+	SendableChooser *posChooser;
+	const std::string posDefault = "0";
+
 	std::string autoSelected;
+	int rotation;
+
+	int posToDegrees[6] = {0, 1, 2, 5, -5, 0}; //TODO: configure these
 
 	//VictorSP *leftMotor, *rightMotor;
 	RobotDrive *drive;
 
-	Joystick *stick;
+	Joystick *driveStick;
+	Joystick *shootStick;
+
 
 	DoubleSolenoid *test1;
 	Solenoid *test2;
@@ -48,16 +57,12 @@ private:
 		}
 		SmartDashboard::PutData("Auto Modes", chooser);
 
-		//leftMotor = new VictorSP(1);
-		//rightMotor = new VictorSP(0);
-
-		//rightMotor->SetInverted(true);
-		//leftMotor->SetInverted(true);
-
-		//frontLeft = new VictorSP(2);
-		//backLeft = new VictorSP(3);
-		//frontRight = new VictorSP(0);
-		//backRight = new VictorSP(1);
+		posChooser = new SendableChooser();
+		posChooser->AddDefault(posDefault, (void*)&posToDegrees[stoi(posDefault)]);
+		for (int i = 1; i < 6; i++) {
+			posChooser->AddObject(std::to_string(i), (void*)&posToDegrees[i]);
+		}
+		SmartDashboard::PutData("Position", posChooser);
 
 		drive = new RobotDrive(2,3,0,1);
 		//drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
@@ -69,7 +74,8 @@ private:
 
 		drive->SetMaxOutput(0.5);
 
-		stick = new Joystick(0);
+		driveStick = new Joystick(0);
+		shootStick = new Joystick(1);
 
 		test1 = new DoubleSolenoid(4,5);
 		//test2 = new Solenoid(0);
@@ -107,6 +113,9 @@ private:
 		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
+		rotation = stoi(*((std::string*)posChooser->GetSelected()));
+
+
 		defenseCrossed = false;
 		done = false;
 
@@ -134,8 +143,7 @@ private:
 				}
 			} else {
 				//after we cross...
-				//TODO: Find an actual desired angle
-				float difference = gyro->GetAngle - 45;
+				float difference = gyro->GetAngle() - rotation;
 
 				if (difference > 10) {
 					drive->ArcadeDrive(0.0,difference * 0.3);
@@ -164,16 +172,16 @@ private:
 
 		printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
 
-		drive->ArcadeDrive(stick);
-		drive->SetMaxOutput((1-stick->GetThrottle())/2);
+		drive->ArcadeDrive(driveStick);
+		drive->SetMaxOutput((1-driveStick->GetThrottle())/2);
 		//printf("%f\n", (1-stick->GetThrottle())/2);
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
 
-		if (stick->GetTrigger()) {
+		if (shootStick->GetRawAxis(2) > 0) {
 			launch1->Set(-1.0);
 			launch2->Set(-1.0);
-		} else if (stick->GetRawButton(2)) {
+		} else if (driveStick->GetRawAxis(5) > 0) {
 			launch1->Set(0.5);
 			launch2->Set(0.5);
 		} else {
@@ -181,9 +189,9 @@ private:
 			launch2->Set(0.0);
 		}
 		//TEST CODE
-		if (stick->GetRawButton(4)) {
-			winch->Set(0.1)
-		} else if (stick->GetRawButton(6)) {
+		if (driveStick->GetRawButton(4)) {
+			winch->Set(0.1);
+		} else if (driveStick->GetRawButton(6)) {
 			winch->Set(-0.1);
 		} else {
 			winch->Set(0.0);
