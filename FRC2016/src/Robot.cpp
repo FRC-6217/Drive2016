@@ -1,5 +1,6 @@
 #include <vector>
 #include <string>
+#include <map>
 
 #include "WPILib.h"
 #include "Autonomous.h"
@@ -49,10 +50,23 @@ private:
 	IMAQdxError imaqError;
 	std::unique_ptr<AxisCamera> camera;
 
+	std::shared_ptr<NetworkTable> table;
+
+	double cameraPos = 5.0; //TODO: set this to the right value
+	double cameraTolerance = 1.0;
+
+	//maps minimum distances to shooter power.
+	//TODO: fill table with real values
+	std::map<double, double> powerLookup = {
+			{10.0, 0.1},
+	};
+
 	void RobotInit()
 	{
 		frame = imaqCreateImage(IMAQ_IMAGE_RGB, 0);
 		camera.reset(new AxisCamera("axis-camera.local"));
+
+		table = NetworkTable::GetTable("GRIP/myContoursReport");
 
 		chooser = new SendableChooser();
 		chooser->AddDefault(autoNameDefault, (void*)&autoNameDefault);
@@ -161,7 +175,30 @@ private:
 					//TODO: use vision processing to line up shot
 					//TODO: Fire ball
 					if (goal == "High") {
+						std::vector<double> areaArray = table->GetNumberArray("area", llvm::ArrayRef<double>());
+						std::vector<double> centerArray = table->GetNumberArray("CenterX", llvm::ArrayRef<double>());
 
+						int largest = 0;
+						int size = 0;
+						for (int i = 0; i < areaArray.size(); i++) {
+							if (areaArray.at(i) > size) {
+								largest = i;
+								size = areaArray.at(i);
+							}
+						}
+
+						if (centerArray.at(largest) - cameraPos > cameraTolerance) {
+							drive->ArcadeDrive(0.0,0.5);
+						} else if (centerArray.at(largest) - cameraPos < cameraTolerance) {
+							drive->ArcadeDrive(0.0,-0.5);
+						} else {
+							//TODO: calculate distance
+							double distance = 10.0;
+							//TODO: set angle to 45 degrees
+							winch->Set(powerLookup[distance]);
+							//TODO: Shoot
+							winch->Set(0.0);
+						}
 					} else {
 
 					}
