@@ -9,12 +9,6 @@
 class Robot: public IterativeRobot
 {
 private:
-	//Vision constants
-	//TODO: configure constants
-	const double TARGET_WIDTH = 1.33;
-	const double VIEW_WIDTH = 9.0;
-	const double VIEW_ANGLE = 49;
-
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
 	const std::string autoNameDefault = "Approach Only";
@@ -58,15 +52,6 @@ private:
 	std::unique_ptr<AxisCamera> camera;
 
 	std::shared_ptr<NetworkTable> table;
-
-	double cameraPos = 5.0; //TODO: set this to the right value
-	double cameraTolerance = 1.0;
-
-	//maps minimum distances to shooter power.
-	//TODO: fill table with real values
-	std::map<double, double> powerLookup = {
-			{10.0, 0.1},
-	};
 
 	int powerCounter = 0;
 	const double POWER_MAX = 100;
@@ -185,30 +170,8 @@ private:
 					//TODO: use vision processing to line up shot
 					//TODO: Fire ball
 					if (goal == "High") {
-						std::vector<double> areaArray = table->GetNumberArray("area", llvm::ArrayRef<double>());
-						std::vector<double> centerArray = table->GetNumberArray("CenterX", llvm::ArrayRef<double>());
-
-						int largest = 0;
-						double size = 0;
-						for (unsigned int i = 0; i < areaArray.size(); i++) {
-							if (areaArray.at(i) > size) {
-								largest = i;
-								size = areaArray.at(i);
-							}
-						}
-
-						if (centerArray.at(largest) - cameraPos > cameraTolerance) {
-							drive->ArcadeDrive(0.0,0.5);
-						} else if (centerArray.at(largest) - cameraPos < cameraTolerance) {
-							drive->ArcadeDrive(0.0,-0.5);
-						} else {
-							double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * size * tan(VIEW_ANGLE));
-							//TODO: set angle to 60/80 degrees
-							launch1->Set(powerLookup[distance]);
-							launch2->Set(powerLookup[distance]);
-							//TODO: Shoot
-							winch->Set(0.0);
-						}
+							Autonomous::alignWithGoal(drive, launch1, launch2, winch, table);
+							//TODO: shoot
 					} else {
 
 					}
