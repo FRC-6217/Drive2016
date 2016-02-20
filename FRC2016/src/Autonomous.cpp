@@ -23,6 +23,12 @@ const std::map<std::string, bool (*)()> Autonomous::crossFunctions =
 	{"Rough Terrain", &Autonomous::roughTerrain}
 };
 
+//maps minimum distances (ft) to shooter power.
+//TODO: fill table with real values
+std::map<double, double> powerLookup = {
+		{2.0, 0.1},
+};
+
 void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *rightEnc) {
 	Autonomous::drive = drive;
 	Autonomous::gyro = gyro;
@@ -98,7 +104,7 @@ bool Autonomous::roughTerrain() {
 	return false;
 }
 
-static void Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table) {
+void Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table) {
 	std::vector<double> areaArray = table->GetNumberArray("area", llvm::ArrayRef<double>());
 	std::vector<double> centerArray = table->GetNumberArray("CenterX", llvm::ArrayRef<double>());
 
@@ -122,5 +128,4 @@ static void Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, Vict
 		launch2->Set(powerLookup[distance]);
 		winch->Set(0.0);
 	}
-}
 }

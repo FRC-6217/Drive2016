@@ -13,12 +13,6 @@ const double VIEW_ANGLE = 49;
 const double CAMERA_POS = 5.0; //TODO: set this to the right value
 const double CAMERA_TOLERANCE = 1.0; //... and this
 
-//maps minimum distances (ft) to shooter power.
-//TODO: fill table with real values
-std::map<double, double> powerLookup = {
-		{2.0, 0.1},
-};
-
 class Autonomous {
 	static RobotDrive *drive;
 	static Gyro *gyro;
@@ -44,7 +38,7 @@ public:
 	static bool roughTerrain();
 
 	//other
-	static void Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table)
+	static void alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table);
 
 };
 

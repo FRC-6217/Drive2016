@@ -94,7 +94,7 @@ private:
 		driveStick = new Joystick(0);
 		shootStick = new Joystick(1);
 
-		test1 = new DoubleSolenoid(4,5);
+		//test1 = new DoubleSolenoid(4,5);
 		//test2 = new Solenoid(0);
 
 		launch1 = new VictorSP(4);
@@ -203,22 +203,23 @@ private:
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
 
-		if (shootStick->GetRawAxis(2) > 0.5) {
-			launch1->Set(-1.0);
-			launch2->Set(-1.0);
-		} else if (shootStick->GetRawAxis(5) > 0.5) {
+		if (shootStick->GetRawAxis(3) > 0.5) {
+			launch1->Set(1.0);
+			launch2->Set(1.0);
+		} else if (shootStick->GetRawAxis(2) > 0.5) {
 			if (powerCounter < POWER_MAX) {
 				powerCounter++;
-				launch1->Set(1.0);
-				launch2->Set(1.0);
+				launch1->Set(-1.0);
+				launch2->Set(-1.0);
 			} else {
-				launch1->Set(0.1);
-				launch2->Set(0.1);
+				launch1->Set(-0.1);
+				launch2->Set(-0.1);
 			}
 			Wait(0.1);
 		} else {
 			launch1->Set(0.0);
 			launch2->Set(0.0);
+			powerCounter = 0.0;
 		}
 
 		if (shootStick->GetRawButton(5)) {
