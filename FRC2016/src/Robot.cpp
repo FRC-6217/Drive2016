@@ -2,11 +2,13 @@
 #include <string>
 #include <map>
 #include <cmath>
+#include <unistd.h>
 
 #include "WPILib.h"
 #include "Autonomous.h"
 
 //TODO: get GRIP running on this, and test with NetworkTables
+//Possibly done?
 
 class Robot: public IterativeRobot
 {
@@ -22,7 +24,7 @@ private:
 	const std::string goalDefault = "High";
 
 	std::string autoSelected;
-	int rotation;
+	double rotation;
 	std::string goal;
 
 	double posToDegrees[5] = {-34.83, -22.66, -7.92, 7.92, 22.66};
@@ -47,6 +49,8 @@ private:
 
 	bool defenseCrossed;
 	bool done;
+
+	int autoCounter;
 
 	IMAQdxSession session;
 	Image *frame;
@@ -114,6 +118,10 @@ private:
 
 
 		Autonomous::init(drive, gyro, leftEnc, rightEnc);
+
+		if (fork() == 0) {
+		            system("/home/lvuser/grip &");
+		}
 	}
 
 
@@ -132,10 +140,8 @@ private:
 		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
-		//std::string tmp = *((std::string*)posChooser->GetSelected());
-		rotation = 0;
+		rotation = *((double*)posChooser->GetSelected());
 
-		//TODO: figure out how to properly pass these values
 		//goal = *((std::string*)goalChooser->GetSelected());
 		goal = "High";
 
@@ -146,6 +152,7 @@ private:
 		leftEnc->Reset();
 		rightEnc->Reset();
 		gyro->Reset();
+		autoCounter = 0;
 	}
 
 
@@ -153,7 +160,10 @@ private:
 	{
 		printf("Distance: %f\n", rightEnc->GetDistance());
 		if(done) {
-			//Nothing
+			autoCounter++;
+			if (autoCounter > 10) {
+				launchPiston->Set(DoubleSolenoid::Value::kReverse);
+			}
 		} else {
 		if (autoSelected == "Approach Only") {
 			done = Autonomous::approachOnly();
@@ -173,7 +183,7 @@ private:
 				} else {
 					if (goal == "High") {
 							Autonomous::alignWithGoal(drive, launch1, launch2, winch, table);
-							//TODO: shoot
+							launchPiston->Set(DoubleSolenoid::Value::kForward);
 					} else {
 
 					}
