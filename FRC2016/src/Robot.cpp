@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <cmath>
 
 #include "WPILib.h"
 #include "Autonomous.h"
@@ -8,6 +9,12 @@
 class Robot: public IterativeRobot
 {
 private:
+	//Vision constants
+	//TODO: configure constants
+	const double TARGET_WIDTH = 1.33;
+	const double VIEW_WIDTH = 9.0;
+	const double VIEW_ANGLE = 49;
+
 	LiveWindow *lw = LiveWindow::GetInstance();
 	SendableChooser *chooser;
 	const std::string autoNameDefault = "Approach Only";
@@ -182,8 +189,8 @@ private:
 						std::vector<double> centerArray = table->GetNumberArray("CenterX", llvm::ArrayRef<double>());
 
 						int largest = 0;
-						int size = 0;
-						for (int i = 0; i < areaArray.size(); i++) {
+						double size = 0;
+						for (unsigned int i = 0; i < areaArray.size(); i++) {
 							if (areaArray.at(i) > size) {
 								largest = i;
 								size = areaArray.at(i);
@@ -195,10 +202,10 @@ private:
 						} else if (centerArray.at(largest) - cameraPos < cameraTolerance) {
 							drive->ArcadeDrive(0.0,-0.5);
 						} else {
-							//TODO: calculate distance
-							double distance = 10.0;
-							//TODO: set angle to 45 degrees
-							winch->Set(powerLookup[distance]);
+							double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * size * tan(VIEW_ANGLE));
+							//TODO: set angle to 60/80 degrees
+							launch1->Set(powerLookup[distance]);
+							launch2->Set(powerLookup[distance]);
 							//TODO: Shoot
 							winch->Set(0.0);
 						}
@@ -254,9 +261,9 @@ private:
 		}
 
 		if (shootStick->GetRawButton(5)) {
-			winch->Set(-1.0);
+			winch->Set(-0.5);
 		} else if (shootStick->GetRawButton(6)) {
-			winch->Set(1.0);
+			winch->Set(0.5);
 		} else {
 			winch->Set(0.0);
 		}
