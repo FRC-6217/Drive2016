@@ -106,7 +106,8 @@ bool Autonomous::roughTerrain() {
 
 void Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table) {
 	std::vector<double> areaArray = table->GetNumberArray("area", llvm::ArrayRef<double>());
-	std::vector<double> centerArray = table->GetNumberArray("CenterX", llvm::ArrayRef<double>());
+	std::vector<double> centerArray = table->GetNumberArray("centerX", llvm::ArrayRef<double>());
+	std::vector<double> widthArray = table->GetNumberArray("width", llvm::ArrayRef<double>());
 
 	int largest = 0;
 	double size = 0;
@@ -116,13 +117,14 @@ void Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 			size = areaArray.at(i);
 		}
 	}
-
+	double width = widthArray.at(largest);
+	printf("area:%f, centerX:%f, width:%f\n", areaArray.at(largest), centerArray.at(largest), widthArray.at(largest));
 	if (centerArray.at(largest) - CAMERA_POS > CAMERA_TOLERANCE) {
 		drive->ArcadeDrive(0.0,0.5);
 	} else if (centerArray.at(largest) - CAMERA_POS < CAMERA_TOLERANCE) {
 		drive->ArcadeDrive(0.0,-0.5);
 	} else {
-		double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * size * tan(VIEW_ANGLE));
+		double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * width * tan(VIEW_ANGLE));
 		//TODO: set angle to 60/80 degrees
 		launch1->Set(powerLookup[distance]);
 		launch2->Set(powerLookup[distance]);

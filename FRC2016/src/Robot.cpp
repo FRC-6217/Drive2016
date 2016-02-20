@@ -6,6 +6,8 @@
 #include "WPILib.h"
 #include "Autonomous.h"
 
+//TODO: get GRIP running on this, and test with NetworkTables
+
 class Robot: public IterativeRobot
 {
 private:
@@ -23,7 +25,7 @@ private:
 	int rotation;
 	std::string goal;
 
-	int posToDegrees[6] = {0, 1, 2, 5, -5, 0}; //TODO: configure these
+	double posToDegrees[5] = {-34.83, -22.66, -7.92, 7.92, 22.66};
 
 	//VictorSP *leftMotor, *rightMotor;
 	RobotDrive *drive;
@@ -54,7 +56,7 @@ private:
 	std::shared_ptr<NetworkTable> table;
 
 	int powerCounter = 0;
-	const double POWER_MAX = 100;
+	const double POWER_MAX = 10;
 
 	void RobotInit()
 	{
@@ -77,9 +79,9 @@ private:
 		}
 		SmartDashboard::PutData("Position", posChooser);
 
-		goalChooser = new SendableChooser();
-		goalChooser->AddDefault(goalDefault, (void*)&goalDefault);
-		goalChooser->AddObject("Low", (void*)"Low");
+//		goalChooser = new SendableChooser();
+//		goalChooser->AddDefault(goalDefault, (void*)&goalDefault);
+//		goalChooser->AddObject("Low", (void*)"Low");
 
 		drive = new RobotDrive(2,3,0,1);
 		//drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
@@ -130,10 +132,12 @@ private:
 		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
-		rotation = stoi(*((std::string*)posChooser->GetSelected()));
+		//std::string tmp = *((std::string*)posChooser->GetSelected());
+		rotation = 0;
 
-		goal = *((std::string*)goalChooser->GetSelected());
-
+		//TODO: figure out how to properly pass these values
+		//goal = *((std::string*)goalChooser->GetSelected());
+		goal = "High";
 
 		defenseCrossed = false;
 		done = false;
@@ -147,7 +151,7 @@ private:
 
 	void AutonomousPeriodic()
 	{
-		printf("Distance: %f, Done:%s\n", rightEnc->GetDistance(), done ? "true" : "false");
+		printf("Distance: %f\n", rightEnc->GetDistance());
 		if(done) {
 			//Nothing
 		} else {
@@ -185,7 +189,7 @@ private:
 		rightEnc->Reset();
 		gyro->Reset();
 
-		powerCounter = 0.0;
+		powerCounter = 0;
 	}
 
 	void TeleopPeriodic()
@@ -207,13 +211,14 @@ private:
 			launch1->Set(1.0);
 			launch2->Set(1.0);
 		} else if (shootStick->GetRawAxis(2) > 0.5) {
+			printf("Power Counter: %i\n", powerCounter);
 			if (powerCounter < POWER_MAX) {
 				powerCounter++;
-				launch1->Set(-1.0);
-				launch2->Set(-1.0);
+				launch1->Set(-0.7);
+				launch2->Set(-0.7);
 			} else {
-				launch1->Set(-0.1);
-				launch2->Set(-0.1);
+				launch1->Set(-0.3);
+				launch2->Set(-0.3);
 			}
 			Wait(0.1);
 		} else {
