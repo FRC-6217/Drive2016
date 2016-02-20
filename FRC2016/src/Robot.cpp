@@ -34,8 +34,8 @@ private:
 	Joystick *shootStick;
 
 
-	DoubleSolenoid *test1;
-	Solenoid *test2;
+	DoubleSolenoid *launchPiston;
+	DoubleSolenoid *tiltPiston;
 
 	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
 	VictorSP *launch1, *launch2;
@@ -236,9 +236,15 @@ private:
 		}
 
 		if (shootStick->GetRawButton(1)) {
-			//TODO: push ball forward
+			launchPiston->Set(DoubleSolenoid::Value::kForward);
 		} else {
-			//pull piston back
+			launchPiston->Set(DoubleSolenoid::Value::kReverse);
+		}
+
+		if (shootStick->GetRawButton(2)) {
+			tiltPiston->Set(DoubleSolenoid::Value::kForward);
+		} else {
+			tiltPiston->Set(DoubleSolenoid::Value::kReverse);
 		}
 	}
 
