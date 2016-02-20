@@ -167,8 +167,6 @@ private:
 				if (difference > 10) {
 					drive->ArcadeDrive(0.0,difference * 0.3);
 				} else {
-					//TODO: use vision processing to line up shot
-					//TODO: Fire ball
 					if (goal == "High") {
 							Autonomous::alignWithGoal(drive, launch1, launch2, winch, table);
 							//TODO: shoot
