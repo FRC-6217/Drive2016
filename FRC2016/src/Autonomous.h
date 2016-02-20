@@ -6,6 +6,7 @@
 
 //Vision constants
 //TODO: configure constants
+//Should be close to right
 const double TARGET_WIDTH = 1.33;
 const double VIEW_WIDTH = 240;
 const double VIEW_ANGLE = 36.4;
