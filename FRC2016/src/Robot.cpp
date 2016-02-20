@@ -61,6 +61,9 @@ private:
 			{10.0, 0.1},
 	};
 
+	int powerCounter = 0;
+	const double POWER_MAX = 100;
+
 	void RobotInit()
 	{
 		frame = imaqCreateImage(IMAQ_IMAGE_RGB, 0);
@@ -213,6 +216,8 @@ private:
 		leftEnc->Reset();
 		rightEnc->Reset();
 		gyro->Reset();
+
+		powerCounter = 0.0;
 	}
 
 	void TeleopPeriodic()
@@ -230,26 +235,33 @@ private:
 		//leftMotor->Set(0.1);
 		//rightMotor->Set(0.1);
 
-		if (shootStick->GetRawAxis(2) > 0) {
+		if (shootStick->GetRawAxis(2) > 0.5) {
 			launch1->Set(-1.0);
 			launch2->Set(-1.0);
-		} else if (shootStick->GetRawAxis(5) > 0) {
-			launch1->Set(0.5);
-			launch2->Set(0.5);
+		} else if (shootStick->GetRawAxis(5) > 0.5) {
+			if (powerCounter < POWER_MAX) {
+				powerCounter++;
+				launch1->Set(1.0);
+				launch2->Set(1.0);
+			} else {
+				launch1->Set(0.1);
+				launch2->Set(0.1);
+			}
+			Wait(0.1);
 		} else {
 			launch1->Set(0.0);
 			launch2->Set(0.0);
 		}
 
-		if (shootStick->GetRawButton(4)) {
-			winch->Set(-0.1);
-		} else if (shootStick->GetRawButton(5)) {
-			winch->Set(0.1);
+		if (shootStick->GetRawButton(5)) {
+			winch->Set(-1.0);
+		} else if (shootStick->GetRawButton(6)) {
+			winch->Set(1.0);
 		} else {
 			winch->Set(0.0);
 		}
 
-		if (shootStick->GetRawButton(0)) {
+		if (shootStick->GetRawButton(1)) {
 			//TODO: push ball forward
 		} else {
 			//pull piston back
