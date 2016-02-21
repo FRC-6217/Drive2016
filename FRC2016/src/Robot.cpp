@@ -36,7 +36,7 @@ private:
 	Joystick *shootStick;
 
 
-	DoubleSolenoid *launchPiston;
+	Solenoid *launchPiston;
 	DoubleSolenoid *tiltPiston;
 
 	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
@@ -102,7 +102,7 @@ private:
 		driveStick = new Joystick(0);
 		shootStick = new Joystick(1);
 
-		launchPiston = new DoubleSolenoid(0,1);
+		launchPiston = new Solenoid(0);
 		tiltPiston = new DoubleSolenoid(2,3);
 
 		launch1 = new VictorSP(4);
@@ -249,9 +249,9 @@ private:
 		}
 
 		if (shootStick->GetRawButton(1)) {
-			launchPiston->Set(DoubleSolenoid::Value::kForward);
+			launchPiston->Set(1);
 		} else {
-			launchPiston->Set(DoubleSolenoid::Value::kReverse);
+			launchPiston->Set(0);
 		}
 
 		if (shootStick->GetRawButton(2)) {
