@@ -47,6 +47,8 @@ private:
 	Encoder *leftEnc;
 	Encoder *rightEnc;
 
+	DigitalInput *launcherSensor;
+
 	bool defenseCrossed;
 	bool done;
 
@@ -100,8 +102,8 @@ private:
 		driveStick = new Joystick(0);
 		shootStick = new Joystick(1);
 
-		launchPiston = new DoubleSolenoid(0);
-		tiltPiston = new DoubleSolenoid(1);
+		launchPiston = new DoubleSolenoid(0,1);
+		tiltPiston = new DoubleSolenoid(2,3);
 
 		launch1 = new VictorSP(4);
 		launch2 = new VictorSP(5);
@@ -116,12 +118,13 @@ private:
 		leftEnc->SetDistancePerPulse(-0.06);
 		rightEnc->SetDistancePerPulse(0.06);
 
+		launcherSensor = new DigitalInput(9);
 
 		Autonomous::init(drive, gyro, leftEnc, rightEnc);
 
-		if (fork() == 0) {
-		            system("/home/lvuser/grip &");
-		}
+		//if (fork() == 0) {
+		//            system("/home/lvuser/grip &");
+		//}
 	}
 
 
@@ -261,7 +264,11 @@ private:
 	void TestPeriodic()
 	{
 		lw->Run();
-		printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
+		if (launcherSensor->Get()) {
+			printf("on\n");
+		} else {
+			printf("off\n");
+		}
 
 	}
 };
