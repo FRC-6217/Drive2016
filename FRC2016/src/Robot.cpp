@@ -38,6 +38,7 @@ private:
 
 	Solenoid *launchPiston;
 	DoubleSolenoid *tiltPiston;
+	DoubleSolenoid *defensePiston;
 
 	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
 	VictorSP *launch1, *launch2;
@@ -63,6 +64,9 @@ private:
 
 	int powerCounter = 0;
 	const double POWER_MAX = 10;
+
+	bool defenseUp;
+	bool debounce;
 
 	void RobotInit()
 	{
@@ -103,7 +107,8 @@ private:
 		shootStick = new Joystick(1);
 
 		launchPiston = new Solenoid(0);
-		tiltPiston = new DoubleSolenoid(2,3);
+		tiltPiston = new DoubleSolenoid(1,2);
+		defensePiston = new DoubleSolenoid(3,4);
 
 		launch1 = new VictorSP(4);
 		launch2 = new VictorSP(5);
@@ -122,6 +127,8 @@ private:
 
 		Autonomous::init(drive, gyro, leftEnc, rightEnc);
 
+		defenseUp = false;
+		debounce = false;
 		//if (fork() == 0) {
 		//            system("/home/lvuser/grip &");
 		//}
@@ -165,7 +172,7 @@ private:
 		if(done) {
 			autoCounter++;
 			if (autoCounter > 10) {
-				launchPiston->Set(DoubleSolenoid::Value::kReverse);
+				launchPiston->Set(0);
 			}
 		} else {
 		if (autoSelected == "Approach Only") {
@@ -185,8 +192,9 @@ private:
 					drive->ArcadeDrive(0.0,difference * 0.3);
 				} else {
 					if (goal == "High") {
-							Autonomous::alignWithGoal(drive, launch1, launch2, winch, table);
-							launchPiston->Set(DoubleSolenoid::Value::kForward);
+							if (Autonomous::alignWithGoal(drive, launch1, launch2, winch, table)) {
+								launchPiston->Set(0);
+							}
 					} else {
 
 					}
@@ -254,10 +262,21 @@ private:
 			launchPiston->Set(0);
 		}
 
-		if (shootStick->GetRawButton(2)) {
+		if (shootStick->GetRawButton(4)) {
 			tiltPiston->Set(DoubleSolenoid::Value::kForward);
 		} else {
 			tiltPiston->Set(DoubleSolenoid::Value::kReverse);
+		}
+
+		if (shootstick->GetRawButton(3) && debounce == false) {
+			debounce = true;
+			if (defenseUp) {
+				defensePiston->Set(DoubleSolenoid::Value::kReverse);
+			} else {
+				defensePiston->Set(DoubleSolenoid::Value::kForward);
+			}
+		} else {
+			debounce = false;
 		}
 	}
 

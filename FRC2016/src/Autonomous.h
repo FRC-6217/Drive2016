@@ -39,7 +39,7 @@ public:
 	static bool roughTerrain();
 
 	//other
-	static void alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table);
+	static bool alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table);
 
 };
 
