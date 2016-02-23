@@ -63,7 +63,7 @@ private:
 	std::shared_ptr<NetworkTable> table;
 
 	int powerCounter = 0;
-	const double POWER_MAX = 10;
+	const double POWER_MAX = 2;
 
 	bool defenseUp;
 	bool debounce;
@@ -238,8 +238,8 @@ private:
 				launch1->Set(-0.7);
 				launch2->Set(-0.7);
 			} else {
-				launch1->Set(-0.3);
-				launch2->Set(-0.3);
+				launch1->Set(-0.5);
+				launch2->Set(-0.5);
 			}
 			Wait(0.1);
 		} else {
