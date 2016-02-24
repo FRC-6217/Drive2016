@@ -104,7 +104,7 @@ bool Autonomous::roughTerrain() {
 	return false;
 }
 
-bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, VictorSP *otherWinch, std::shared_ptr<NetworkTable> table, Timer *timer) {
+bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, Victor *otherWinch, std::shared_ptr<NetworkTable> table, Timer *timer) {
 	std::vector<double> areaArray = table->GetNumberArray("area", llvm::ArrayRef<double>());
 	std::vector<double> centerArray = table->GetNumberArray("centerX", llvm::ArrayRef<double>());
 	std::vector<double> widthArray = table->GetNumberArray("width", llvm::ArrayRef<double>());

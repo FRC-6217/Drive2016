@@ -79,7 +79,7 @@ private:
 	void RobotInit()
 	{
 		frame = imaqCreateImage(IMAQ_IMAGE_RGB, 0);
-		camera.reset(new AxisCamera("axis-camera.local"));
+		//camera.reset(new AxisCamera("axis-camera.local"));
 
 		table = NetworkTable::GetTable("GRIP/myContoursReport");
 
@@ -138,7 +138,6 @@ private:
 		Autonomous::init(drive, gyro, leftEnc, rightEnc);
 
 		timer =  new Timer();
-
 		defenseUp = false;
 		debounce = false;
 		if (fork() == 0) {
@@ -229,9 +228,9 @@ private:
 
 	void TeleopPeriodic()
 	{
-		camera->GetImage(frame);
-		imaqDrawShapeOnImage(frame, frame, { 10, 10, 100, 100 }, DrawMode::IMAQ_DRAW_VALUE, ShapeMode::IMAQ_SHAPE_OVAL, 0.0f);
-		CameraServer::GetInstance()->SetImage(frame);
+		//camera->GetImage(frame);
+		//imaqDrawShapeOnImage(frame, frame, { 10, 10, 100, 100 }, DrawMode::IMAQ_DRAW_VALUE, ShapeMode::IMAQ_SHAPE_OVAL, 0.0f);
+		//CameraServer::GetInstance()->SetImage(frame);
 
 
 		printf("Left Encoder: %i, Right Encoder: %i, Gyro: %f\n", leftEnc->Get(), rightEnc->Get(), gyro->GetAngle());
@@ -288,10 +287,12 @@ private:
 			debounce = true;
 			if (defenseUp) {
 				defensePiston->Set(DoubleSolenoid::Value::kReverse);
+				defenseUp = false;
 			} else {
+				defenseUp =true;
 				defensePiston->Set(DoubleSolenoid::Value::kForward);
 			}
-		} else {
+		} else if (!shootStick->GetRawButton(3)){
 			debounce = false;
 		}
 	}
