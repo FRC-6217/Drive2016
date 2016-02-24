@@ -41,7 +41,7 @@ private:
 
 
 	Solenoid *launchPiston;
-	DoubleSolenoid *tiltPiston;
+	//DoubleSolenoid *tiltPiston;
 	DoubleSolenoid *defensePiston;
 
 	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
@@ -112,9 +112,9 @@ private:
 		driveStick = new Joystick(0);
 		shootStick = new Joystick(1);
 
-		launchPiston = new Solenoid(0);
-		tiltPiston = new DoubleSolenoid(1,2);
-		defensePiston = new DoubleSolenoid(3,4);
+		launchPiston = new Solenoid(3);
+		//tiltPiston = new DoubleSolenoid(0,1);
+		defensePiston = new DoubleSolenoid(0,1);
 
 		launch1 = new VictorSP(4);
 		launch2 = new VictorSP(5);
@@ -136,9 +136,9 @@ private:
 
 		defenseUp = false;
 		debounce = false;
-		//if (fork() == 0) {
-		//            system("/home/lvuser/grip &");
-		//}
+		if (fork() == 0) {
+		            system("/home/lvuser/grip &");
+		}
 	}
 
 
@@ -272,9 +272,9 @@ private:
 		}
 
 		if (shootStick->GetRawButton(4)) {
-			tiltPiston->Set(DoubleSolenoid::Value::kForward);
+			//tiltPiston->Set(DoubleSolenoid::Value::kForward);
 		} else {
-			tiltPiston->Set(DoubleSolenoid::Value::kReverse);
+			//tiltPiston->Set(DoubleSolenoid::Value::kReverse);
 		}
 
 		if (shootStick->GetRawButton(3) && debounce == false) {
