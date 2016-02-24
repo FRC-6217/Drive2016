@@ -74,6 +74,8 @@ private:
 	bool defenseUp;
 	bool debounce;
 
+	Timer *timer;
+
 	void RobotInit()
 	{
 		frame = imaqCreateImage(IMAQ_IMAGE_RGB, 0);
@@ -135,6 +137,8 @@ private:
 
 		Autonomous::init(drive, gyro, leftEnc, rightEnc);
 
+		timer =  new Timer();
+
 		defenseUp = false;
 		debounce = false;
 		if (fork() == 0) {
@@ -183,34 +187,36 @@ private:
 				launchPiston->Set(0);
 			}
 		} else {
-		if (autoSelected == "Approach Only") {
-			done = Autonomous::approachOnly();
-		} else if (!defenseCrossed) {
-				if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
-					bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
-					defenseCrossed = crossFunction();
-				} else {
-					//doNothing();
-				}
+			if (autoSelected == "Approach Only") {
+				done = Autonomous::approachOnly();
+			} else if (!defenseCrossed) {
+					if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
+						bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
+						defenseCrossed = crossFunction();
+					} else {
+						//doNothing();
+					}
+					timer->Reset()
 			} else {
 				//after we cross...
 				float difference = gyro->GetAngle() - rotation;
 
 				if (difference > 10) {
 					drive->ArcadeDrive(0.0,difference * 0.3);
+					timer->Reset();
 				} else {
 					if (goal == "Yes") {
-							if (Autonomous::alignWithGoal(drive, launch1, launch2, winch, table)) {
-								launchPiston->Set(0);
-							}
+						if (!Autonomous::alignWithGoal(drive, launch1, launch2, winch, otherWinch, table, timer)) {
+							launchPiston->Set(0);
+						} else {
+							done = true;
+						}
 					} else {
-
-					}
-					done = true;
 				}
 			}
 		}
 	}
+}
 
 	void TeleopInit()
 	{

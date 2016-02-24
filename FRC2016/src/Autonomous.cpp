@@ -104,7 +104,7 @@ bool Autonomous::roughTerrain() {
 	return false;
 }
 
-bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, std::shared_ptr<NetworkTable> table) {
+bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *launch2, VictorSP *winch, VictorSP *otherWinch, std::shared_ptr<NetworkTable> table, Timer *timer) {
 	std::vector<double> areaArray = table->GetNumberArray("area", llvm::ArrayRef<double>());
 	std::vector<double> centerArray = table->GetNumberArray("centerX", llvm::ArrayRef<double>());
 	std::vector<double> widthArray = table->GetNumberArray("width", llvm::ArrayRef<double>());
@@ -126,11 +126,27 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 			drive->ArcadeDrive(0.0,-0.5);
 		} else {
 			double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * width * tan(VIEW_ANGLE));
-			//TODO: set angle to 60/80 degrees
-			launch1->Set(powerLookup[distance]);
-			launch2->Set(powerLookup[distance]);
-			winch->Set(0.0);
+			//TODO: set correct times
+
+			double time = 0.0;
+			for (std::map<double,double>::iterator it = powerLookup.begin(); it != powerLookup.end(); it++) {
+				if (it->first < distance) {
+					angle = it->second;
+				}
+			}
+
+			if (timer->Get() < time) {
+				winch->Set(-0.5);
+				otherWinch->Set(0.5);
+			} else {
+				winch->Set(0.0);
+				return true;
+			}
+
+			//launch1->Set(powerLookup[distance]);
+			//launch2->Set(powerLookup[distance]);
+			//winch->Set(0.0);
 		}
 	}
-	return largest > 0;
+	return false;
 }
