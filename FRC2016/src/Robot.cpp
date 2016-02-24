@@ -106,6 +106,7 @@ private:
 		drive->SetInvertedMotor(RobotDrive::MotorType::kRearLeftMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kFrontRightMotor, true);
 		drive->SetInvertedMotor(RobotDrive::MotorType::kRearRightMotor, true);
+		drive->SetExpiration(0.2);
 
 		drive->SetMaxOutput(0.5);
 
