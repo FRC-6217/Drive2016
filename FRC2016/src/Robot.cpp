@@ -48,7 +48,7 @@ private:
 	VictorSP *launch1, *launch2;
 	VictorSP *winch;
 
-	VictorSP *otherWinch; //Its past the time for good names.
+	Victor *otherWinch; //Its past the time for good names.
 
 	Gyro *gyro;
 	Encoder *leftEnc;
@@ -124,7 +124,7 @@ private:
 		launch1->SetInverted(true);
 
 		winch = new VictorSP(6);
-		otherWinch = new VictorSP(7);
+		otherWinch = new Victor(7);
 
 		gyro = new AnalogGyro(1);
 		leftEnc = new Encoder(2, 3, false, Encoder::EncodingType::k1X);
@@ -196,7 +196,7 @@ private:
 					} else {
 						//doNothing();
 					}
-					timer->Reset()
+					timer->Reset();
 			} else {
 				//after we cross...
 				float difference = gyro->GetAngle() - rotation;

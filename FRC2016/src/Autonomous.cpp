@@ -126,7 +126,6 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 			drive->ArcadeDrive(0.0,-0.5);
 		} else {
 			double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * width * tan(VIEW_ANGLE));
-			//TODO: set correct times
 
 			double time = 0.0;
 			for (std::map<double,double>::iterator it = powerLookup.begin(); it != powerLookup.end(); it++) {
