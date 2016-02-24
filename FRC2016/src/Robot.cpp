@@ -23,9 +23,13 @@ private:
 	SendableChooser *goalChooser;
 	const std::string goalDefault = "High";
 
+	SendableChooser *shootChooser;
+	const std::string shootDefault = "Yes";
+
 	std::string autoSelected;
 	double rotation;
 	std::string goal;
+	std::string shoot;
 
 	double posToDegrees[5] = {-34.83, -22.66, -7.92, 7.92, 22.66};
 
@@ -43,6 +47,8 @@ private:
 	VictorSP *frontLeft, *backLeft, *frontRight, *backRight;
 	VictorSP *launch1, *launch2;
 	VictorSP *winch;
+
+	VictorSP *otherWinch; //Its past the time for good names.
 
 	Gyro *gyro;
 	Encoder *leftEnc;
@@ -89,9 +95,9 @@ private:
 		}
 		SmartDashboard::PutData("Position", posChooser);
 
-//		goalChooser = new SendableChooser();
-//		goalChooser->AddDefault(goalDefault, (void*)&goalDefault);
-//		goalChooser->AddObject("Low", (void*)"Low");
+		shootChooser = new SendableChooser();
+		shootChooser->AddDefault(shootDefault, (void*)&shootDefault);
+		shootChooser->AddObject("No", (void*)"No");
 
 		drive = new RobotDrive(2,3,0,1);
 		//drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
@@ -115,6 +121,7 @@ private:
 		launch1->SetInverted(true);
 
 		winch = new VictorSP(6);
+		otherWinch = new VictorSP(7);
 
 		gyro = new AnalogGyro(1);
 		leftEnc = new Encoder(2, 3, false, Encoder::EncodingType::k1X);
@@ -153,7 +160,7 @@ private:
 		rotation = *((double*)posChooser->GetSelected());
 
 		//goal = *((std::string*)goalChooser->GetSelected());
-		goal = "High";
+		shoot = *((std::string*)shootChooser->GetSelected());
 
 		defenseCrossed = false;
 		done = false;
@@ -191,7 +198,7 @@ private:
 				if (difference > 10) {
 					drive->ArcadeDrive(0.0,difference * 0.3);
 				} else {
-					if (goal == "High") {
+					if (goal == "Yes") {
 							if (Autonomous::alignWithGoal(drive, launch1, launch2, winch, table)) {
 								launchPiston->Set(0);
 							}
@@ -250,8 +257,10 @@ private:
 
 		if (shootStick->GetRawButton(5)) {
 			winch->Set(-0.5);
+			otherWinch->Set(0.5);
 		} else if (shootStick->GetRawButton(6)) {
 			winch->Set(0.5);
+			otherWinch->Set(0.5);
 		} else {
 			winch->Set(0.0);
 		}
@@ -268,7 +277,7 @@ private:
 			tiltPiston->Set(DoubleSolenoid::Value::kReverse);
 		}
 
-		if (shootstick->GetRawButton(3) && debounce == false) {
+		if (shootStick->GetRawButton(3) && debounce == false) {
 			debounce = true;
 			if (defenseUp) {
 				defensePiston->Set(DoubleSolenoid::Value::kReverse);

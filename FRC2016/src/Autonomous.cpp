@@ -117,7 +117,7 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 			size = areaArray.at(i);
 		}
 	}
-	if (largest > 0) {
+	if (largest > -1) {
 		double width = widthArray.at(largest);
 		printf("area:%f, centerX:%f, width:%f\n", areaArray.at(largest), centerArray.at(largest), widthArray.at(largest));
 		if (centerArray.at(largest) - CAMERA_POS > CAMERA_TOLERANCE) {
