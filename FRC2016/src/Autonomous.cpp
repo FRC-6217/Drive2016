@@ -130,7 +130,7 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 			double time = 0.0;
 			for (std::map<double,double>::iterator it = powerLookup.begin(); it != powerLookup.end(); it++) {
 				if (it->first < distance) {
-					angle = it->second;
+					time = it->second;
 				}
 			}
 
