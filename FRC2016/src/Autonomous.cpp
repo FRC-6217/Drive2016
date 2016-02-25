@@ -20,7 +20,8 @@ const std::map<std::string, bool (*)()> Autonomous::crossFunctions =
 	{"Drawbridge", &Autonomous::drawBridge},
 	{"Sally Port", &Autonomous::sallyPort},
 	{"Rock Wall", &Autonomous::rockWall},
-	{"Rough Terrain", &Autonomous::roughTerrain}
+	{"Rough Terrain", &Autonomous::roughTerrain},
+	{"Spy Bot", &Autonomous::spyBot}
 };
 
 //maps minimum distances (ft) to shooter power.
@@ -34,6 +35,10 @@ void Autonomous::init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *
 	Autonomous::gyro = gyro;
 	Autonomous::leftEnc = leftEnc;
 	Autonomous::rightEnc = rightEnc;
+}
+
+bool Autonomous::spyBot() {
+	return true;
 }
 
 bool Autonomous::approachOnly() {

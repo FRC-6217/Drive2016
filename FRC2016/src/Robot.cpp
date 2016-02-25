@@ -197,6 +197,9 @@ private:
 					}
 					timer->Reset();
 			} else {
+				if (autoSelected == "Spy Bot") {
+					rotation = 90;
+				}
 				//after we cross...
 				float difference = gyro->GetAngle() - rotation;
 

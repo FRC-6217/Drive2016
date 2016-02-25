@@ -26,6 +26,8 @@ public:
 
 	static void init(RobotDrive *drive, Gyro *gyro, Encoder *leftEnc, Encoder *rightEnc);
 
+	static bool spyBot();
+	
 	static bool approachOnly();
 	//cross functions
 	static bool lowBar();
