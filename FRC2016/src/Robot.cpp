@@ -266,10 +266,13 @@ private:
 			otherWinch->Set(0.5);
 		} else if (shootStick->GetRawButton(6)) {
 			winch->Set(0.5);
-			otherWinch->Set(0.5);
+			otherWinch->Set(-0.5);
 		} else {
 			winch->Set(0.0);
+			otherWinch->Set(0.0);
 		}
+
+		//TODO: make the other winch work how it should.
 
 		if (shootStick->GetRawButton(1)) {
 			launchPiston->Set(1);
