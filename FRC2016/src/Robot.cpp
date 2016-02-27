@@ -316,10 +316,9 @@ private:
 			launchPiston->Set(0);
 		}
 
-		if (shootStick->GetRawButton(4)) {
-			//tiltPiston->Set(DoubleSolenoid::Value::kForward);
+		if (shootStick->GetRawButton(3)) {
+			Autonomous::alignWithGoal(drive, launch1, launch2, winch, otherWinch, table, timer);
 		} else {
-			//tiltPiston->Set(DoubleSolenoid::Value::kReverse);
 		}
 
 		if (shootStick->GetRawButton(3) && debounce == false) {
