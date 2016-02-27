@@ -125,6 +125,7 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 	if (largest > -1) {
 		double width = widthArray.at(largest);
 		printf("area:%f, centerX:%f, width:%f\n", areaArray.at(largest), centerArray.at(largest), widthArray.at(largest));
+
 		if (centerArray.at(largest) - CAMERA_POS > CAMERA_TOLERANCE) {
 			drive->ArcadeDrive(0.0,0.5);
 		} else if (centerArray.at(largest) - CAMERA_POS < CAMERA_TOLERANCE) {
@@ -144,6 +145,7 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 				otherWinch->Set(0.5);
 			} else {
 				winch->Set(0.0);
+				otherWinch->Set(0.0);
 				return true;
 			}
 

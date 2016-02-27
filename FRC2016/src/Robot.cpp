@@ -74,6 +74,8 @@ private:
 	bool defenseUp;
 	bool debounce;
 
+	bool launcherDown;
+
 	Timer *timer;
 
 	void RobotInit()
@@ -143,6 +145,8 @@ private:
 		if (fork() == 0) {
 		            system("/home/lvuser/grip &");
 		}
+
+		launcherDown = false;
 	}
 
 
@@ -174,12 +178,26 @@ private:
 		rightEnc->Reset();
 		gyro->Reset();
 		autoCounter = 0;
+		timer->Reset()
 	}
 
 
 	void AutonomousPeriodic()
 	{
 		printf("Distance: %f\n", rightEnc->GetDistance());
+
+		if (!launcherDown) {
+			if (timer->Get() > 1.0) {
+				winch->Set(0.5);
+				otherWinch->Set(0.5);
+			} else if (timer->Get() < 3.0) {
+				winch->Set(0.5);
+				otherWinch->Set(-0.5);
+			} else {
+				launcherDown = true;
+			}
+		}
+
 		if(done) {
 			autoCounter++;
 			if (autoCounter > 10) {
@@ -211,14 +229,15 @@ private:
 						if (!Autonomous::alignWithGoal(drive, launch1, launch2, winch, otherWinch, table, timer)) {
 							launchPiston->Set(0);
 						} else {
+							launchPiston->Set(1);
 							done = true;
 						}
 					} else {
+					}
 				}
 			}
 		}
 	}
-}
 
 	void TeleopInit()
 	{
