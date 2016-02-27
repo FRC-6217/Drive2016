@@ -178,7 +178,7 @@ private:
 		rightEnc->Reset();
 		gyro->Reset();
 		autoCounter = 0;
-		timer->Reset()
+		timer->Reset();
 	}
 
 
@@ -202,6 +202,8 @@ private:
 			autoCounter++;
 			if (autoCounter > 10) {
 				launchPiston->Set(0);
+				launch1->Set(0.0);
+				launch2->Set(0.0);
 			}
 		} else {
 			if (autoSelected == "Approach Only") {
@@ -283,32 +285,30 @@ private:
 		}
 
 		//use this button to spin only one winch, to lift up.
-		if (shootStick->GetRawButton(4)) {
+		/* if (shootStick->GetRawButton(4)) { */
 
-			otherWinch->Set(0.5)
-		} else {
-			otherWinch->Set(0.0);
-		}
+		/* 	otherWinch->Set(0.5); */
+		/* } else { */
+		/* 	otherWinch->Set(0.0); */
+		/* } */
 
 		if (shootStick->GetRawButton(5)) {
 			winch->Set(-0.5);
 
-			if (!shootStick->GetRawButton(4)) {
+			/* if (!shootStick->GetRawButton(4)) { */
 				otherWinch->Set(0.5);
-			}
+			/* } */
 		} else if (shootStick->GetRawButton(6)) {
 			winch->Set(0.5);
-			if (!shootStick->GetRawButton(4)) {
+			/* if (!shootStick->GetRawButton(4)) { */
 				otherWinch->Set(-0.5);
-			}
+			/* } */
 		} else {
 			winch->Set(0.0);
-			if (!shootStick->GetRawButton(4)) {
+			/* if (!shootStick->GetRawButton(4)) { */
 				otherWinch->Set(0.0);
-			}
+			/* } */
 		}
-
-		//TODO: make the other winch work how it should.
 
 		if (shootStick->GetRawButton(1)) {
 			launchPiston->Set(1);
@@ -318,7 +318,6 @@ private:
 
 		if (shootStick->GetRawButton(3)) {
 			Autonomous::alignWithGoal(drive, launch1, launch2, winch, otherWinch, table, timer);
-		} else {
 		}
 
 		if (shootStick->GetRawButton(3) && debounce == false) {

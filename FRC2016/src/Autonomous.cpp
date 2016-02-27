@@ -148,7 +148,9 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 				otherWinch->Set(0.0);
 				return true;
 			}
-
+			
+			launch1->Set(1.0);
+			launch2->Set(1.0);
 			//launch1->Set(powerLookup[distance]);
 			//launch2->Set(powerLookup[distance]);
 			//winch->Set(0.0);
