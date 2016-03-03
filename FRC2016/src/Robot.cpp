@@ -103,6 +103,8 @@ private:
 		shootChooser->AddDefault(shootDefault, (void*)&shootDefault);
 		shootChooser->AddObject("No", (void*)"No");
 
+		SmartDashboard::PutData("Shoot", shootChooser);
+
 		drive = new RobotDrive(2,3,0,1);
 		//drive = new RobotDrive(frontLeft, backLeft, frontRight, backRight);
 
