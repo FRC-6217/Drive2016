@@ -11,7 +11,7 @@ const double TARGET_WIDTH = 1.33;
 const double VIEW_WIDTH = 240;
 const double VIEW_ANGLE = 36.4;
 
-const double CAMERA_POS = 5.0; //TODO: set this to the right value
+const double CAMERA_POS = 200.0; //TODO: set this to the right value
 const double CAMERA_TOLERANCE = 1.0; //... and this
 
 class Autonomous {

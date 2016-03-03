@@ -272,11 +272,11 @@ private:
 			printf("Power Counter: %i\n", powerCounter);
 			if (powerCounter < POWER_MAX) {
 				powerCounter++;
-				launch1->Set(-0.7);
-				launch2->Set(-0.7);
+				launch1->Set(-0.8);
+				launch2->Set(-0.8);
 			} else {
-				launch1->Set(-0.5);
-				launch2->Set(-0.5);
+				launch1->Set(-0.6);
+				launch2->Set(-0.6);
 			}
 		} else {
 			launch1->Set(0.0);
@@ -296,12 +296,12 @@ private:
 			winch->Set(-0.5);
 
 			/* if (!shootStick->GetRawButton(4)) { */
-				otherWinch->Set(0.5);
+				otherWinch->Set(-0.5);
 			/* } */
 		} else if (shootStick->GetRawButton(6)) {
 			winch->Set(0.5);
 			/* if (!shootStick->GetRawButton(4)) { */
-				otherWinch->Set(-0.5);
+				otherWinch->Set(0.5);
 			/* } */
 		} else {
 			winch->Set(0.0);
