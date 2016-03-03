@@ -44,7 +44,7 @@ bool Autonomous::spyBot() {
 bool Autonomous::approachOnly() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 78.11 || rightEnc->GetDistance() > 78.11) {
+	if (leftEnc->GetDistance() > 48.11 || rightEnc->GetDistance() > 48.11) {
 		return true;
 	}
 	return false;
@@ -54,7 +54,7 @@ bool Autonomous::approachOnly() {
 bool Autonomous::lowBar() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 121.61 || rightEnc->GetDistance() > 121.61) {
+	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
 	return false;
@@ -71,7 +71,7 @@ bool Autonomous::chevalDeFrise() {
 bool Autonomous::moat() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 121.61 || rightEnc->GetDistance() > 121.61) {
+	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
 	return false;
@@ -79,7 +79,7 @@ bool Autonomous::moat() {
 bool Autonomous::ramparts() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 121.61 || rightEnc->GetDistance() > 121.61) {
+	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
 	return false;
@@ -95,7 +95,7 @@ bool Autonomous::sallyPort() {
 bool Autonomous::rockWall() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 121.61 || rightEnc->GetDistance() > 121.61) {
+	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
 	return false;
@@ -103,7 +103,7 @@ bool Autonomous::rockWall() {
 bool Autonomous::roughTerrain() {
 	float angle = gyro->GetAngle();
 	drive->Drive(-0.5, -angle * .03);
-	if (leftEnc->GetDistance() > 121.61 || rightEnc->GetDistance() > 121.61) {
+	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
 	return false;
