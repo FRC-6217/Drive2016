@@ -309,6 +309,7 @@ private:
 				otherWinch->Set(0.0);
 			/* } */
 		}
+		
 
 		if (shootStick->GetRawButton(1)) {
 			launchPiston->Set(1);
