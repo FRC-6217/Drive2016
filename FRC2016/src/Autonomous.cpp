@@ -128,8 +128,10 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 
 		if (centerArray.at(largest) - CAMERA_POS > CAMERA_TOLERANCE) {
 			drive->ArcadeDrive(0.0,0.5);
+			timer->Reset();
 		} else if (centerArray.at(largest) - CAMERA_POS < CAMERA_TOLERANCE) {
 			drive->ArcadeDrive(0.0,-0.5);
+			timer->Reset();
 		} else {
 			double distance = TARGET_WIDTH * VIEW_WIDTH / (2 * width * tan(VIEW_ANGLE));
 
@@ -140,12 +142,14 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 				}
 			}
 
+			if (timer->Get() < 1.0) {
+				otherWinch->Set(-0.5);
+			}
+
 			if (timer->Get() < time) {
 				winch->Set(-0.5);
-				otherWinch->Set(0.5);
 			} else {
 				winch->Set(0.0);
-				otherWinch->Set(0.0);
 				return true;
 			}
 			

@@ -192,8 +192,10 @@ private:
 				otherWinch->Set(0.5);
 			} else if (timer->Get() < 3.0) {
 				winch->Set(0.5);
-				otherWinch->Set(-0.5);
+				otherWinch->Set(0.0);
 			} else {
+				winch->Set(0.0);
+				otherWinch->Set(0.0);
 				launcherDown = true;
 			}
 		}
@@ -285,29 +287,30 @@ private:
 		}
 
 		//use this button to spin only one winch, to lift up.
-		/* if (shootStick->GetRawButton(4)) { */
-
-		/* 	otherWinch->Set(0.5); */
-		/* } else { */
-		/* 	otherWinch->Set(0.0); */
-		/* } */
+		 if (shootStick->GetRawButton(7)) {
+		 	otherWinch->Set(0.5);
+		 } else if (shootStick->GetRawButton(8)) {
+			 otherWinch->Set(-0.5);
+		 } else {
+		 	otherWinch->Set(0.0);
+		 }
 
 		if (shootStick->GetRawButton(5)) {
 			winch->Set(-0.5);
 
-			/* if (!shootStick->GetRawButton(4)) { */
-				otherWinch->Set(-0.5);
-			/* } */
+			if (!shootStick->GetRawButton(7) && !shootStick->GetRawButton(8)) {
+//				otherWinch->Set(-0.5);
+			}
 		} else if (shootStick->GetRawButton(6)) {
 			winch->Set(0.5);
-			/* if (!shootStick->GetRawButton(4)) { */
-				otherWinch->Set(0.5);
-			/* } */
+			if (!shootStick->GetRawButton(7) && !shootStick->GetRawButton(8)) {
+//				otherWinch->Set(0.5);
+			}
 		} else {
 			winch->Set(0.0);
-			/* if (!shootStick->GetRawButton(4)) { */
-				otherWinch->Set(0.0);
-			/* } */
+			if (!shootStick->GetRawButton(7) && !shootStick->GetRawButton(8)) {
+//,				otherWinch->Set(0.0);
+			}
 		}
 		
 
