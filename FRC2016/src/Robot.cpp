@@ -167,13 +167,17 @@ private:
 		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
 		std::cout << "Auto selected: " << autoSelected << std::endl;
 
-		rotation = *((double*)posChooser->GetSelected());
+		rotation = 0.0;
+				//*((double*)posChooser->GetSelected());
 
 		//goal = *((std::string*)goalChooser->GetSelected());
-		shoot = *((std::string*)shootChooser->GetSelected());
+		shoot = "No";
+		//*((std::string*)shootChooser->GetSelected());
 
 		defenseCrossed = false;
 		done = false;
+
+
 		printf("Here\n");
 		drive->SetMaxOutput(1.0);
 		printf("There\n");
@@ -188,6 +192,8 @@ private:
 
 	void AutonomousPeriodic()
 	{
+
+		drive->SetMaxOutput(1.0);
 		printf("Distance: %f\n", rightEnc->GetDistance());
 
 //		if (!launcherDown) {
@@ -223,6 +229,12 @@ private:
 		} else {
 			if (autoSelected == "Approach Only") {
 				done = Autonomous::approachOnly();
+
+				launch1->Set(0.0);
+				launch2->Set(0.0);
+				winch->Set(0.0);
+				otherWinch->Set(0.0);
+
 			} else if (!defenseCrossed) {
 					if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
 						bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
