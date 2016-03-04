@@ -53,7 +53,7 @@ bool Autonomous::approachOnly() {
 //cross functions
 bool Autonomous::lowBar() {
 	float angle = gyro->GetAngle();
-	drive->Drive(-0.5, -angle * .03);
+	drive->Drive(0.5, -angle * .03);
 	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
@@ -127,9 +127,19 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 		printf("area:%f, centerX:%f, width:%f\n", areaArray.at(largest), centerArray.at(largest), widthArray.at(largest));
 
 		if (centerArray.at(largest) - CAMERA_POS > CAMERA_TOLERANCE) {
+			launch1->Set(0.0);
+			launch2->Set(0.0);
+			winch->Set(0.0);
+			otherWinch->Set(0.0);
+
 			drive->ArcadeDrive(0.0,0.5);
 			timer->Reset();
 		} else if (centerArray.at(largest) - CAMERA_POS < CAMERA_TOLERANCE) {
+			launch1->Set(0.0);
+			launch2->Set(0.0);
+			winch->Set(0.0);
+			otherWinch->Set(0.0);
+
 			drive->ArcadeDrive(0.0,-0.5);
 			timer->Reset();
 		} else {
@@ -144,6 +154,8 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 
 			if (timer->Get() < 1.0) {
 				otherWinch->Set(-0.5);
+			} else {
+				otherWinch->Set(0.0);
 			}
 
 			if (timer->Get() < time) {
@@ -158,7 +170,15 @@ bool Autonomous::alignWithGoal(RobotDrive *drive, VictorSP *launch1, VictorSP *l
 			//launch1->Set(powerLookup[distance]);
 			//launch2->Set(powerLookup[distance]);
 			//winch->Set(0.0);
+
+			drive->ArcadeDrive(0.0,0.0);
 		}
+	} else {
+		launch1->Set(0.0);
+		launch2->Set(0.0);
+		winch->Set(0.0);
+		otherWinch->Set(0.0);
+		drive->ArcadeDrive(0.0,0.0);
 	}
 	return false;
 }

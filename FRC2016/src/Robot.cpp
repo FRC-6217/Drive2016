@@ -174,9 +174,9 @@ private:
 
 		defenseCrossed = false;
 		done = false;
-
+		printf("Here\n");
 		drive->SetMaxOutput(1.0);
-
+		printf("There\n");
 		//Make sure to reset the encoder!
 		leftEnc->Reset();
 		rightEnc->Reset();
@@ -190,26 +190,35 @@ private:
 	{
 		printf("Distance: %f\n", rightEnc->GetDistance());
 
-		if (!launcherDown) {
-			if (timer->Get() > 1.0) {
-				winch->Set(0.5);
-				otherWinch->Set(0.5);
-			} else if (timer->Get() < 3.0) {
-				winch->Set(0.5);
-				otherWinch->Set(0.0);
-			} else {
-				winch->Set(0.0);
-				otherWinch->Set(0.0);
-				launcherDown = true;
-			}
-		}
+//		if (!launcherDown) {
+//			if (timer->Get() > 1.0) {
+//				winch->Set(0.5);
+//				otherWinch->Set(0.5);
+//			} else if (timer->Get() < 3.0) {
+//				winch->Set(0.5);
+//				otherWinch->Set(0.0);
+//			} else {
+//				winch->Set(0.0);
+//				otherWinch->Set(0.0);
+//				launcherDown = true;
+//			}
+//		}
 
 		if(done) {
-			autoCounter++;
+			winch->Set(0.0);
+			otherWinch->Set(0.0);
+			drive->ArcadeDrive(0.0,0.0);
+
 			if (autoCounter > 10) {
 				launchPiston->Set(0);
 				launch1->Set(0.0);
 				launch2->Set(0.0);
+			} else {
+				autoCounter++;
+				if (shoot == "Yes") {
+					launch1->Set(1.0);
+					launch2->Set(1.0);
+				}
 			}
 		} else {
 			if (autoSelected == "Approach Only") {
@@ -219,7 +228,12 @@ private:
 						bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
 						defenseCrossed = crossFunction();
 					} else {
-						//doNothing();
+						done = true;
+						launch1->Set(0.0);
+						launch2->Set(0.0);
+						winch->Set(0.0);
+						otherWinch->Set(0.0);
+						drive->ArcadeDrive(0.0,0.0);
 					}
 					timer->Reset();
 			} else {
@@ -230,6 +244,11 @@ private:
 				float difference = gyro->GetAngle() - rotation;
 
 				if (difference > 10) {
+					launch1->Set(0.0);
+					launch2->Set(0.0);
+					winch->Set(0.0);
+					otherWinch->Set(0.0);
+
 					drive->ArcadeDrive(0.0,difference * 0.3);
 					timer->Reset();
 				} else {
@@ -237,10 +256,22 @@ private:
 						if (!Autonomous::alignWithGoal(drive, launch1, launch2, winch, otherWinch, table, timer)) {
 							launchPiston->Set(0);
 						} else {
+							launch1->Set(0.0);
+							launch2->Set(0.0);
+							winch->Set(0.0);
+							otherWinch->Set(0.0);
+							drive->ArcadeDrive(0.0,0.0);
+
 							launchPiston->Set(1);
 							done = true;
 						}
 					} else {
+						launch1->Set(0.0);
+						launch2->Set(0.0);
+						winch->Set(0.0);
+						otherWinch->Set(0.0);
+
+						done = true;
 					}
 				}
 			}
