@@ -144,9 +144,9 @@ private:
 		timer =  new Timer();
 		defenseUp = false;
 		debounce = false;
-		if (fork() == 0) {
-		            system("/home/lvuser/grip &");
-		}
+		//if (fork() == 0) {
+		//            system("/home/lvuser/grip &");
+		//}
 
 		launcherDown = false;
 	}
@@ -174,6 +174,8 @@ private:
 
 		defenseCrossed = false;
 		done = false;
+
+		drive->SetMaxOutput(1.0);
 
 		//Make sure to reset the encoder!
 		leftEnc->Reset();

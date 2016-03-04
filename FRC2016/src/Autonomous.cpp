@@ -70,7 +70,7 @@ bool Autonomous::chevalDeFrise() {
 }
 bool Autonomous::moat() {
 	float angle = gyro->GetAngle();
-	drive->Drive(-0.5, -angle * .03);
+	drive->Drive(-0.7, -angle * .03);
 	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
@@ -78,7 +78,7 @@ bool Autonomous::moat() {
 }
 bool Autonomous::ramparts() {
 	float angle = gyro->GetAngle();
-	drive->Drive(-0.5, -angle * .03);
+	drive->Drive(-0.7, -angle * .03);
 	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
@@ -94,7 +94,7 @@ bool Autonomous::sallyPort() {
 }
 bool Autonomous::rockWall() {
 	float angle = gyro->GetAngle();
-	drive->Drive(-0.5, -angle * .03);
+	drive->Drive(-0.7, -angle * .03);
 	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
@@ -102,7 +102,7 @@ bool Autonomous::rockWall() {
 }
 bool Autonomous::roughTerrain() {
 	float angle = gyro->GetAngle();
-	drive->Drive(-0.5, -angle * .03);
+	drive->Drive(-0.7, -angle * .03);
 	if (leftEnc->GetDistance() > 93.61 || rightEnc->GetDistance() > 93.61) {
 		return true;
 	}
