@@ -178,9 +178,9 @@ private:
 		done = false;
 
 
-		printf("Here\n");
+		std::cout << "Here" << std::endl;
 		drive->SetMaxOutput(1.0);
-		printf("There\n");
+		std::cout << "there" << std::endl;
 		//Make sure to reset the encoder!
 		leftEnc->Reset();
 		rightEnc->Reset();
@@ -239,6 +239,10 @@ private:
 					if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
 						bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
 						defenseCrossed = crossFunction();
+						launch1->Set(0.0);
+						launch2->Set(0.0);
+						winch->Set(0.0);
+						otherWinch->Set(0.0);
 					} else {
 						done = true;
 						launch1->Set(0.0);
@@ -343,13 +347,13 @@ private:
 		 }
 
 		if (shootStick->GetRawButton(5)) {
-			winch->Set(-0.5);
+			winch->Set(-0.7);
 
 			if (!shootStick->GetRawButton(7) && !shootStick->GetRawButton(8)) {
 //				otherWinch->Set(-0.5);
 			}
 		} else if (shootStick->GetRawButton(6)) {
-			winch->Set(0.5);
+			winch->Set(0.7);
 			if (!shootStick->GetRawButton(7) && !shootStick->GetRawButton(8)) {
 //				otherWinch->Set(0.5);
 			}
