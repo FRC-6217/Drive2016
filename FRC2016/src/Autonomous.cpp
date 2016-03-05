@@ -78,7 +78,7 @@ bool Autonomous::moat() {
 }
 bool Autonomous::ramparts() {
 	float angle = gyro->GetAngle();
-	drive->Drive(-1.0, -angle * .03);
+	drive->Drive(-0.8, -angle * .03);
 	if (leftEnc->GetDistance() > 115 || rightEnc->GetDistance() > 115) {
 		return true;
 	}
