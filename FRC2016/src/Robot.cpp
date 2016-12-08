@@ -163,135 +163,19 @@ private:
 	 */
 	void AutonomousInit()
 	{
-		autoSelected = *((std::string*)chooser->GetSelected());
-		//std::string autoSelected = SmartDashboard::GetString("Auto Selector", autoNameDefault);
-		std::cout << "Auto selected: " << autoSelected << std::endl;
-
-		rotation = 0.0;
-				//*((double*)posChooser->GetSelected());
-
-		//goal = *((std::string*)goalChooser->GetSelected());
-		shoot = "No";
-		//*((std::string*)shootChooser->GetSelected());
-
-		defenseCrossed = false;
-		done = false;
-
-
-		std::cout << "Here" << std::endl;
-		drive->SetMaxOutput(1.0);
-		std::cout << "there" << std::endl;
-		//Make sure to reset the encoder!
-		leftEnc->Reset();
 		rightEnc->Reset();
-		gyro->Reset();
-		autoCounter = 0;
-		timer->Reset();
+		leftEnc->Reset();
 	}
-
 
 	void AutonomousPeriodic()
 	{
-
-		drive->SetMaxOutput(1.0);
-		printf("Distance: %f\n", rightEnc->GetDistance());
-
-//		if (!launcherDown) {
-//			if (timer->Get() > 1.0) {
-//				winch->Set(0.5);
-//				otherWinch->Set(0.5);
-//			} else if (timer->Get() < 3.0) {
-//				winch->Set(0.5);
-//				otherWinch->Set(0.0);
-//			} else {
-//				winch->Set(0.0);
-//				otherWinch->Set(0.0);
-//				launcherDown = true;
-//			}
-//		}
-
-		if(done) {
-			winch->Set(0.0);
-			otherWinch->Set(0.0);
-			drive->ArcadeDrive(0.0,0.0);
-
-			if (autoCounter > 10) {
-				launchPiston->Set(0);
-				launch1->Set(0.0);
-				launch2->Set(0.0);
-			} else {
-				autoCounter++;
-				if (shoot == "Yes") {
-					launch1->Set(1.0);
-					launch2->Set(1.0);
-				}
-			}
+		if (rightEnc->GetDistance() < 10.0)
+		{
+			drive->Drive(-0.4, 0);
 		} else {
-			if (autoSelected == "Approach Only") {
-				done = Autonomous::approachOnly();
-
-				launch1->Set(0.0);
-				launch2->Set(0.0);
-				winch->Set(0.0);
-				otherWinch->Set(0.0);
-
-			} else if (!defenseCrossed) {
-					if(Autonomous::crossFunctions.find(autoSelected) != Autonomous::crossFunctions.end()) {
-						bool (*crossFunction)() = Autonomous::crossFunctions.at(autoSelected);
-						defenseCrossed = crossFunction();
-						launch1->Set(0.0);
-						launch2->Set(0.0);
-						winch->Set(0.0);
-						otherWinch->Set(0.0);
-					} else {
-						done = true;
-						launch1->Set(0.0);
-						launch2->Set(0.0);
-						winch->Set(0.0);
-						otherWinch->Set(0.0);
-						drive->ArcadeDrive(0.0,0.0);
-					}
-					timer->Reset();
-			} else {
-				if (autoSelected == "Spy Bot") {
-					rotation = 90;
-				}
-				//after we cross...
-				float difference = gyro->GetAngle() - rotation;
-
-				if (difference > 10) {
-					launch1->Set(0.0);
-					launch2->Set(0.0);
-					winch->Set(0.0);
-					otherWinch->Set(0.0);
-
-					drive->ArcadeDrive(0.0,difference * 0.3);
-					timer->Reset();
-				} else {
-					if (goal == "Yes") {
-						if (!Autonomous::alignWithGoal(drive, launch1, launch2, winch, otherWinch, table, timer)) {
-							launchPiston->Set(0);
-						} else {
-							launch1->Set(0.0);
-							launch2->Set(0.0);
-							winch->Set(0.0);
-							otherWinch->Set(0.0);
-							drive->ArcadeDrive(0.0,0.0);
-
-							launchPiston->Set(1);
-							done = true;
-						}
-					} else {
-						launch1->Set(0.0);
-						launch2->Set(0.0);
-						winch->Set(0.0);
-						otherWinch->Set(0.0);
-
-						done = true;
-					}
-				}
-			}
+			drive->StopMotor();
 		}
+
 	}
 
 	void TeleopInit()
